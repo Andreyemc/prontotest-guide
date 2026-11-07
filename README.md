@@ -92,5 +92,7 @@ python3 -m http.server 8000
 
 canonical и hreflang (es / en / ru / x-default) ведут на `prontotest.net`,
 Open Graph и Twitter-карточки заполнены, JSON-LD `@graph` содержит Organization,
-BreadcrumbList, ImageObject и Article. Стенд закрыт `robots: noindex,follow` —
-снять при переносе на боевой домен.
+BreadcrumbList, ImageObject и Article. Стенд закрыт от индексации дважды:
+мета-тегом `robots: noindex,follow` на страницах и заголовком `X-Robots-Tag`
+на всех ответах через `vercel.json` (он закрывает и статику — картинки,
+OG-карточки). При переносе на боевой домен снять оба.
