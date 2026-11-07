@@ -72,7 +72,8 @@
        ["small", "img", "", false]],
       [["full", "feature", "", true]],
       [["small", "solid", "primary", true], ["small", "img", "", false],
-       ["small", "solid", "sun", false]]
+       ["small", "solid", "sun", false]],
+      [["large", "img", "", true]]
     ];
     var SPAN_FOR_COUNT = { 1: "tile--span6", 2: "tile--span3" };
 
@@ -80,7 +81,6 @@
     var perPage = parseInt(bento.getAttribute("data-per-page"), 10) || 9;
     var pager = document.querySelector("[data-pager]");
     var chipGroup = document.querySelector(".chips");
-    var empty = null;
     var booted = false;
     window.setTimeout(function () { booted = true; }, 900);
     var state = { category: "all", page: 1 };
@@ -160,14 +160,6 @@
         }
         i += take;
         row++;
-      }
-
-      if (empty) { empty.remove(); empty = null; }
-      if (!slice.length) {
-        empty = document.createElement("p");
-        empty.className = "bento__empty";
-        empty.textContent = "No tips in this topic yet.";
-        bento.appendChild(empty);
       }
 
       reveal(fresh);
@@ -289,109 +281,6 @@
       if (ev.target.closest(".menu__item")) closeMenu();
     });
   }
-
-  /* ---- Анимированные иконки useAnimations ----
-     Lottie-плеер грузится лениво и только если движение не отключено;
-     до этого и при prefers-reduced-motion работают статичные SVG. */
-
-  var UA_BASE = "https://useanimations.com/icons/";
-  var UA_PLAYER = "https://cdn.jsdelivr.net/npm/lottie-web@5.13.0/build/player/lottie_light.min.js";
-
-  var UA = {
-    "globe": { mode: "hover" },
-    "share": { mode: "hover" },
-    "copy": { mode: "click" },
-    "arrow-left": { mode: "hover" },
-    "arrow-right": { mode: "hover" },
-    "menu-v4": { mode: "toggle", speed: 2.9 }
-  };
-
-  function loadPlayer() {
-    if (window.__uaPlayer) return window.__uaPlayer;
-    window.__uaPlayer = new Promise(function (resolve, reject) {
-      var sc = document.createElement("script");
-      sc.src = UA_PLAYER;
-      sc.async = true;
-      sc.onload = function () { resolve(window.lottie); };
-      sc.onerror = reject;
-      document.head.appendChild(sc);
-    });
-    return window.__uaPlayer;
-  }
-
-  function mountIcon(host, lottie, autostart) {
-    var id = host.getAttribute("data-ua");
-    var cfg = UA[id];
-    if (!cfg) return;
-
-    var box = document.createElement("span");
-    box.className = "ua";
-    box.setAttribute("aria-hidden", "true");
-    var ref = host.querySelector(".icon, .burger");
-    host.insertBefore(box, ref || host.firstChild);
-
-    var anim = lottie.loadAnimation({
-      container: box,
-      renderer: "svg",
-      loop: false,
-      autoplay: false,
-      path: UA_BASE + id + ".json"
-    });
-
-    if (cfg.speed) anim.setSpeed(cfg.speed);
-    var on = false;
-
-    anim.addEventListener("DOMLoaded", function () {
-      host.classList.add("has-ua");
-      anim.goToAndStop(0, true);
-      /* первое касание уже произошло до загрузки плеера — доигрываем его */
-      if (autostart && cfg.mode !== "toggle") anim.goToAndPlay(0, true);
-      if (autostart && cfg.mode === "toggle") { anim.setDirection(1); anim.play(); on = true; }
-    });
-
-    if (cfg.mode === "hover") {
-      host.addEventListener("mouseenter", function () {
-        if (!anim.isPaused) return;
-        anim.goToAndPlay(0, true);
-      });
-      host.addEventListener("focus", function () { anim.goToAndPlay(0, true); });
-    } else if (cfg.mode === "click") {
-      host.addEventListener("click", function () { anim.goToAndPlay(0, true); });
-    } else if (cfg.mode === "toggle") {
-      host.addEventListener("click", function () {
-        on = !on;
-        anim.setDirection(on ? 1 : -1);
-        anim.play();
-      });
-    }
-  }
-
-  /* Иконка поднимается до Lottie только когда её действительно трогают:
-     ни библиотека, ни данные не грузятся, пока страница просто открыта. */
-
-  function upgradeIcons() {
-    if (reduced) return;
-    var hosts = Array.prototype.slice.call(document.querySelectorAll("[data-ua]"));
-
-    hosts.forEach(function (host) {
-      if (!UA[host.getAttribute("data-ua")]) return;
-      var armed = false;
-
-      var wake = function () {
-        if (armed) return;
-        armed = true;
-        loadPlayer().then(function (lottie) {
-          if (lottie) mountIcon(host, lottie, true);
-        }).catch(function () { /* остаётся статичная иконка */ });
-      };
-
-      host.addEventListener("pointerenter", wake, { once: true });
-      host.addEventListener("focus", wake, { once: true });
-      host.addEventListener("click", wake, { once: true });
-    });
-  }
-
-  upgradeIcons();
 
   /* ---- Share и Copy link ----
      В шаринг уходит канонический URL статьи, а не адрес этого стенда. */

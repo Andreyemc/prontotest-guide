@@ -14,7 +14,7 @@ SPRITE = (ROOT / "assets" / "icons.svg").read_text(encoding="utf-8").strip()
 ARTICLES = json.loads((ROOT / "data" / "guide.json").read_text(encoding="utf-8"))
 
 CANON = "https://prontotest.net"
-PER_PAGE = 9
+PER_PAGE = 10
 
 # ---------------------------------------------------------------- категории ---
 # В контент-спеке категорий нет, в макете они есть у десяти статей — здесь
@@ -126,6 +126,15 @@ def fmt_dates(a):
     return out
 
 
+
+def anim_caption(a):
+    """Подпись к анимации: длительность цикла и описание сюжета из alt."""
+    loop = a["loop"]
+    secs = int(loop) if float(loop).is_integer() else loop
+    body = re.sub(r"^Animation,\s*", "", a["animationAlt"]).strip()
+    return f"Animation · {secs} s. {body[:1].upper()}{body[1:]}."
+
+
 def article_href(slug, base):
     return f"{base}guia/{slug}.html"
 
@@ -174,7 +183,7 @@ def header(base):
 {links}
         </nav>
         <div class="header__buttons">
-          <button class="btn-glass btn-glass--icon" type="button" aria-label="Change language" data-ua="globe">{icon("globe")}</button>
+          <button class="btn-glass btn-glass--icon" type="button" aria-label="Change language">{icon("globe")}</button>
           <a class="btn-glass" href="#">Get app</a>
         </div>
       </div>
@@ -186,7 +195,7 @@ def header(base):
       <a class="logo" href="{base}index.html">PRONTOTEST</a>
       <div class="header-m__icons">
         <button class="icon-round" type="button" aria-label="Search">{icon("search")}</button>
-        <button class="icon-round" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu" data-menu-toggle data-ua="menu-v4"><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
+        <button class="icon-round" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu" data-menu-toggle><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
       </div>
     </div>
   </header>
@@ -228,7 +237,7 @@ def footer(base):
 {cols}
         </div>
         <div class="footer__right">
-          <button class="lang" type="button" data-ua="globe">{icon("globe")}<span>EN</span></button>
+          <button class="lang" type="button">{icon("globe")}<span>EN</span></button>
           <div class="badges">
             <a href="#"><img src="{base}assets/images/badges/appstore.png" alt="Download on the App Store" width="149" height="44" loading="lazy"></a>
             <a href="#"><img src="{base}assets/images/badges/googleplay.png" alt="Get it on Google Play" width="149" height="44" loading="lazy"></a>
@@ -269,7 +278,7 @@ def menu(base):
           <a href="#"><img src="{base}assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" loading="lazy"></a>
           <a href="#"><img src="{base}assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" loading="lazy"></a>
         </div>
-        <button class="lang" type="button" data-ua="globe">{icon("globe")}<span>EN</span></button>
+        <button class="lang" type="button">{icon("globe")}<span>EN</span></button>
       </div>
     </div>
   </div>
@@ -303,7 +312,20 @@ ROWS = [
     [("full", "feature", "", True)],
     [("small", "solid", "primary", True), ("small", "img", "", False),
      ("small", "solid", "sun", False)],
+    [("large", "img", "", True)],
 ]
+
+
+
+CTA_TILE = f"""        <div class="tile tile--large tile--cta">
+          <span class="tile__body">
+            <span class="tile__top">
+              {eyebrow("checkmark-in-circle", CTA_EYEBROW, "eyebrow--plain")}
+              <span class="tile__title">{e(CTA_TITLE)}</span>
+            </span>
+            <a class="btn-pill" href="#">{e(CTA_BUTTON)}</a>
+          </span>
+        </div>"""
 
 
 def tile_classes(i):
@@ -403,14 +425,13 @@ def build_hub():
 
       <div class="bento" data-bento data-per-page="{PER_PAGE}">
 {cards}
+{CTA_TILE}
       </div>
 
-{promo("", CTA_BUTTON)}
-
       <nav class="pager" aria-label="Tip pages" data-pager>
-        <a class="pager__item is-disabled" href="#" data-page="prev" aria-disabled="true" data-ua="arrow-left">{icon("arrow-left")}<span>Previous</span></a>
+        <a class="pager__item is-disabled" href="#" data-page="prev" aria-disabled="true">{icon("arrow-left")}<span>Previous</span></a>
 {pages}
-        <a class="pager__item" href="#" data-page="next" data-ua="arrow-right"><span>Next</span>{icon("arrow-right")}</a>
+        <a class="pager__item" href="#" data-page="next"><span>Next</span>{icon("arrow-right")}</a>
       </nav>
     </main>
 {menu("")}
@@ -479,8 +500,8 @@ def build_article(a):
 """
 
     share = f"""            <div class="head-actions">
-              <button class="btn-secondary" type="button" data-share data-ua="share">{icon("share")}<span>Share</span></button>
-              <button class="btn-secondary" type="button" data-copy-link data-ua="copy">{icon("link")}<span>Copy link</span></button>
+              <button class="btn-secondary" type="button" data-share>{icon("share")}<span>Share</span></button>
+              <button class="btn-secondary" type="button" data-copy-link>{icon("link")}<span>Copy link</span></button>
             </div>"""
 
     return (head(title=a["metaTitle"], description=a["takeaway"],
@@ -505,7 +526,7 @@ def build_article(a):
         </header>
 
         <figure class="article-hero">
-          <img src="{a['animation']}" alt="{e(a['animationAlt'])}" width="1200" height="675">
+          <img src="{a['cover']}" alt="{e(a['coverCaption'])}" width="1200" height="675">
         </figure>
 
         <div class="article-column measure">
@@ -524,10 +545,14 @@ def build_article(a):
 {steps}
             </ol>
           </div>
+        </div>
 
-          <div class="head-row head-row--end">
-{share}
-          </div>
+        <figure class="article-anim">
+          <img src="{a['animation']}" alt="{e(a['animationAlt'])}" width="1200" height="675" loading="lazy">
+        </figure>
+
+        <div class="article-end measure">
+          <p class="caption">{e(anim_caption(a))}</p>
         </div>
       </article>
 

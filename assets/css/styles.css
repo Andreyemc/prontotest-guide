@@ -108,7 +108,7 @@ body {
   color: var(--ink);
   font-family: var(--font-text);
   font-size: 16px;
-  line-height: 1.4;
+  line-height: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -256,7 +256,6 @@ figure {
 
 .logo {
   font-family: var(--font-display);
-  font-kerning: none;
   font-weight: 900;
   font-size: 22px;
   line-height: 0.9;
@@ -281,7 +280,6 @@ figure {
   font-weight: 500;
   letter-spacing: -0.32px;
   color: var(--yango-muted);
-  border-radius: 6px;
   transition: color var(--dur-base) var(--ease-out);
 }
 
@@ -509,12 +507,6 @@ figure {
   gap: 40px;
 }
 
-.bento__empty {
-  grid-column: span 6;
-  padding: 48px 0;
-  font-size: 19px;
-  color: var(--muted);
-}
 
 /* ---------- Tile ----------
    Одна разметка на все варианты: вид задаётся классами, поэтому сетку можно
@@ -528,6 +520,10 @@ figure {
   border-radius: var(--radius-tile);
   background: var(--surface);
   color: var(--ink);
+  /* grid-элементы по умолчанию min-height: auto — длинный заголовок
+     растягивал ряд и сдвигал всю сетку вниз */
+  min-width: 0;
+  min-height: 0;
   transition: transform var(--dur-slow) var(--ease-out-quint),
     box-shadow var(--dur-slow) var(--ease-out-quint),
     background-color var(--dur-slow) var(--ease-out-quint);
@@ -544,9 +540,9 @@ figure {
 
 /* размеры */
 
-.tile--large { grid-column: span 3; min-height: 560px; }
-.tile--small { grid-column: span 2; min-height: 420px; }
-.tile--full  { grid-column: span 6; min-height: 600px; }
+.tile--large { grid-column: span 3; height: 560px; }
+.tile--small { grid-column: span 2; height: 420px; }
+.tile--full  { grid-column: span 6; height: 600px; }
 .tile--span6 { grid-column: span 6; }
 .tile--span3 { grid-column: span 3; }
 
@@ -583,8 +579,10 @@ figure {
   flex: 1 1 auto;
   flex-direction: column;
   justify-content: space-between;
-  gap: 24px;
+  gap: 16px;
   padding: 24px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .tile--large .tile__body { padding: 32px; }
@@ -1412,7 +1410,6 @@ body.is-locked { overflow: hidden; }
   .bento > .tile { grid-column: span 1; min-height: 420px; }
   .bento > .tile--full,
   .bento > .tile--span6,
-  .bento__empty,
   .cta-row { grid-column: span 2; }
   .bento > .tile--full { min-height: 460px; }
 
@@ -1500,7 +1497,6 @@ body.is-locked { overflow: hidden; }
   .bento > .tile--full,
   .bento > .tile--span6,
   .bento > .tile--span3,
-  .bento__empty,
   .cta-row {
     grid-column: span 1;
     min-height: 0;
@@ -1676,7 +1672,6 @@ body.is-locked { overflow: hidden; }
    Раздел Guide: хаб с пагинацией и фильтром, страница статьи
    ========================================================================== */
 
-.more__row--two { grid-template-columns: repeat(2, 1fr); }
 
 .head-row--end {
   padding-top: 4px;
@@ -1703,11 +1698,9 @@ body.is-locked { overflow: hidden; }
 }
 
 @media (max-width: 1099px) {
-  .more__row--two { grid-template-columns: repeat(2, 1fr); }
-}
+  }
 
 @media (max-width: 767px) {
-  .more__row--two { grid-template-columns: 1fr; }
   .article-hero img { aspect-ratio: 16 / 9; height: auto; }
   .head-row--end { padding-top: 0; }
 }
@@ -2012,31 +2005,6 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
 
 
 /* ==========================================================================
-   Анимированные иконки useAnimations (MIT) — Lottie поверх статичного SVG
-   ========================================================================== */
-
-.ua {
-  display: inline-flex;
-  width: 1em;
-  height: 1em;
-  flex: none;
-  font-size: inherit;
-}
-
-.ua svg { width: 100%; height: 100%; display: block; }
-.ua svg path { stroke: currentColor; }
-
-/* статичная иконка остаётся до апгрейда и при prefers-reduced-motion */
-.has-ua > .icon,
-.has-ua > .burger { display: none; }
-
-.btn-glass .ua,
-.icon-round .ua { font-size: 18px; }
-.btn-secondary .ua,
-.pager__item .ua { font-size: 14px; }
-.lang .ua { font-size: 18px; }
-
-/* ==========================================================================
    Правки по QA от 2026-11-07
    ========================================================================== */
 
@@ -2142,4 +2110,57 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
     0%, 100% { opacity: 0.6; }
     50% { opacity: 1; }
   }
+}
+
+/* CTA-плитка листинга (Tile · Free test) — одиннадцатая плитка макета */
+
+.tile--cta {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.tile--cta:hover {
+  background: var(--ink-hover);
+  transform: none;
+  box-shadow: none;
+}
+
+.tile--cta .tile__body { padding: 32px; }
+.tile--cta .tile__top { gap: 10px; }
+
+.tile--cta .eyebrow__tile {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.tile--cta .eyebrow__label { color: #ffffffd9; }
+
+.tile--cta .tile__title {
+  font-family: var(--font-display);
+  font-kerning: none;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .tile--cta .tile__body { padding: 24px; gap: 40px; }
+  .tile--cta .tile__title { font-size: 24px; }
+}
+
+/* Анимация после текста статьи (Animation Figure из макета) */
+
+.article-anim {
+  width: 100%;
+  overflow: hidden;
+}
+
+.article-anim img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
