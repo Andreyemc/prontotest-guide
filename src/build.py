@@ -14,6 +14,9 @@ SPRITE = (ROOT / "assets" / "icons.svg").read_text(encoding="utf-8").strip()
 ARTICLES = json.loads((ROOT / "data" / "guide.json").read_text(encoding="utf-8"))
 
 CANON = "https://prontotest.net"
+# где лежат OG-карточки (assets/og, генерирует src/og.py); при переезде на
+# боевой домен поменять на него
+SITE = "https://prontotest-guide.vercel.app"
 PER_PAGE = 10
 
 # ---------------------------------------------------------------- категории ---
@@ -403,12 +406,21 @@ def build_hub():
         ],
     }, ensure_ascii=False)
 
+    og_img = f"{SITE}/assets/og/guide.jpg"
     og = f"""<meta property="og:type" content="website">
+<meta property="og:site_name" content="ProntoTest">
 <meta property="og:title" content="{e(HUB_TITLE)}">
 <meta property="og:description" content="{e(HUB_META_DESC)}">
 <meta property="og:url" content="{CANON}/en/guia">
-<meta property="og:image" content="{CANON}/assets/test_dgt-98c29666.jpg">
+<meta property="og:image" content="{og_img}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="ProntoTest card: {e(HUB_TITLE)}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(HUB_TITLE)}">
+<meta name="twitter:description" content="{e(HUB_META_DESC)}">
+<meta name="twitter:image" content="{og_img}">
 <script type="application/ld+json">{ld}</script>
 """
 
@@ -472,6 +484,7 @@ def build_article(a):
             <figure class="mini__figure"><img src="{m['cover']}" alt="" width="1200" height="675" loading="lazy"></figure>
           </a>""" for i, m in enumerate(by_n[n] for n in a["moreTips"]))
 
+    og_img = f"{SITE}/assets/og/{a['slug']}.jpg"
     ld = json.dumps({
         "@context": "https://schema.org",
         "@graph": [
@@ -485,7 +498,7 @@ def build_article(a):
             {"@type": "ImageObject", "contentUrl": a["cover"], "caption": a["coverCaption"],
              "width": 1200, "height": 675},
             {"@type": "Article", "headline": a["title"], "description": a["takeaway"],
-             "image": a["cover"], "datePublished": a["publishedIso"],
+             "image": [og_img, a["cover"]], "datePublished": a["publishedIso"],
              "dateModified": a["updatedIso"] or a["publishedIso"],
              "author": {"@type": "Organization", "name": "ProntoTest"},
              "publisher": {"@type": "Organization", "name": "ProntoTest"},
@@ -493,12 +506,15 @@ def build_article(a):
         ],
     }, ensure_ascii=False)
 
-    og_img = f"{CANON}/og/guia/{a['slug']}.en.png"
     og = f"""<meta property="og:type" content="article">
+<meta property="og:site_name" content="ProntoTest">
 <meta property="og:title" content="{e(a['title'])}">
 <meta property="og:description" content="{e(a['takeaway'])}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:image" content="{og_img}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:alt" content="ProntoTest card: {e(a['title'])}">
 <meta property="article:published_time" content="{a['publishedIso']}">
 <meta property="article:modified_time" content="{a['updatedIso'] or a['publishedIso']}">

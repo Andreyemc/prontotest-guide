@@ -14,6 +14,7 @@ data/guide.json         контент: тексты, даты, alt, ассет�
 src/parse_spec.py       разбор контент-спеки в data/guide.json
 src/build.py            генерация хаба и страниц статей
 src/icons.py            выгрузка SVG-спрайта иконок из макета
+src/og.py               генерация OG-карточек 1200×630 в assets/og/
 assets/css/styles.css   токены, сетка, типографика, состояния, скелетоны
 assets/js/app.js        шапка, появление, фильтр, пагинация, меню, share, иконки
 assets/icons.svg        спрайт иконок категорий (Iconoteka, из макета)
@@ -78,6 +79,14 @@ python3 -m http.server 8000
   канонический URL на `prontotest.net`, а не адрес стенда.
 - Все переходы на `transform` и `opacity`; при `prefers-reduced-motion`
   остаются только изменения прозрачности.
+
+## OG-карточки
+
+`assets/og/{slug}.jpg` и `assets/og/guide.jpg`, 1200×630, собраны на токенах и
+шрифтах макета: логотип, эйбров категории, заголовок (display или Geist по флагу
+`displayTitle`), дата и обложка в плитке со скруглением 32. Пересобрать после
+правки контента: `python3 src/og.py`. Адрес карточек задаёт `SITE` в
+`src/build.py` — при переезде на боевой домен поменять.
 
 ## SEO
 
