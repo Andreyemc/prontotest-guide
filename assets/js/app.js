@@ -208,79 +208,22 @@
     render();
   }
 
-  /* ---- Скелетон первого экрана (раздел 12) ----
-     Показываем, только если первый экран не готов за 120 мс; держим не меньше
-     300 мс, чтобы не мигал; прячем за 150 мс и запускаем каскад появления. */
+  /* ---- Плейсхолдеры картинок ----
+     Вместо общей заглушки поверх страницы мерцает сам блок картинки: готовый
+     текст, фильтры и карточки не прячутся из-за медленной иллюстрации. */
 
-  var skeleton = document.querySelector("[data-skeleton]");
-
-  if (skeleton) {
-    var scope = skeleton.parentElement;
-    var SHOW_AFTER = 120, MIN_SHOW = 300, CAP = 1200;
-    var shownAt = 0;
-    var finished = false;
-
-    /* Ждём только картинки первого экрана: ниже фолда скелетона всё равно нет,
-       и держать его из-за них — это как раз «долгий скелетон на ровном месте». */
-    var fold = window.innerHeight;
-    var watched = Array.prototype.slice.call(
-      scope.querySelectorAll(".tile:not([hidden]) img, .article-hero img"))
-      .filter(function (img) {
-        var r = img.getBoundingClientRect();
-        return r.top < fold && r.bottom > 0;
-      });
-
-    function pending() {
-      return watched.some(function (img) {
-        return img.offsetParent !== null && !(img.complete && img.naturalWidth);
-      });
-    }
-
-    function show() {
-      if (finished || !pending()) return;
-      shownAt = Date.now();
-      skeleton.hidden = false;
-      scope.classList.add("is-preloading");
-    }
-
-    function hide() {
-      if (finished) return;
-      finished = true;
-      if (!shownAt) { skeleton.remove(); return; }
-      var wait = Math.max(0, MIN_SHOW - (Date.now() - shownAt));
-      window.setTimeout(function () {
-        skeleton.classList.add("is-out");
-        scope.classList.remove("is-preloading");
-        window.setTimeout(function () { skeleton.remove(); }, 150);
-        replay();
-      }, wait);
-    }
-
-    function replay() {
-      if (reduced) return;
-      var items = Array.prototype.slice.call(
-        scope.querySelectorAll(".tile:not([hidden]).reveal"));
-      items.forEach(function (el) { el.classList.remove("is-in"); });
-      void scope.offsetWidth;
-      items.forEach(function (el) { el.classList.add("is-in"); });
-    }
-
-    window.setTimeout(show, SHOW_AFTER);
-    window.setTimeout(hide, CAP);
-
-    if (!watched.length || !pending()) hide();
+  Array.prototype.slice.call(
+    document.querySelectorAll(".tile__media, .article-hero, .mini__figure")
+  ).forEach(function (box) {
+    var img = box.querySelector("img");
+    if (!img) return;
+    var done = function () { box.classList.add("is-ready"); };
+    if (img.complete && img.naturalWidth) done();
     else {
-      var left = watched.length;
-      watched.forEach(function (img) {
-        var done = function () { if (--left <= 0) hide(); };
-        if (img.complete && img.naturalWidth) done();
-        else {
-          img.addEventListener("load", done, { once: true });
-          img.addEventListener("error", done, { once: true });
-        }
-      });
+      img.addEventListener("load", done, { once: true });
+      img.addEventListener("error", done, { once: true });
     }
-  }
+  });
 
   /* ---- Бургер-меню ---- */
 
@@ -376,7 +319,7 @@
     return window.__uaPlayer;
   }
 
-  function mountIcon(host, lottie) {
+  function mountIcon(host, lottie, autostart) {
     var id = host.getAttribute("data-ua");
     var cfg = UA[id];
     if (!cfg) return;
@@ -396,10 +339,14 @@
     });
 
     if (cfg.speed) anim.setSpeed(cfg.speed);
+    var on = false;
 
     anim.addEventListener("DOMLoaded", function () {
       host.classList.add("has-ua");
       anim.goToAndStop(0, true);
+      /* первое касание уже произошло до загрузки плеера — доигрываем его */
+      if (autostart && cfg.mode !== "toggle") anim.goToAndPlay(0, true);
+      if (autostart && cfg.mode === "toggle") { anim.setDirection(1); anim.play(); on = true; }
     });
 
     if (cfg.mode === "hover") {
@@ -411,7 +358,6 @@
     } else if (cfg.mode === "click") {
       host.addEventListener("click", function () { anim.goToAndPlay(0, true); });
     } else if (cfg.mode === "toggle") {
-      var on = false;
       host.addEventListener("click", function () {
         on = !on;
         anim.setDirection(on ? 1 : -1);
@@ -420,18 +366,32 @@
     }
   }
 
+  /* Иконка поднимается до Lottie только когда её действительно трогают:
+     ни библиотека, ни данные не грузятся, пока страница просто открыта. */
+
   function upgradeIcons() {
     if (reduced) return;
     var hosts = Array.prototype.slice.call(document.querySelectorAll("[data-ua]"));
-    if (!hosts.length) return;
-    loadPlayer().then(function (lottie) {
-      if (!lottie) return;
-      hosts.forEach(function (h) { mountIcon(h, lottie); });
-    }).catch(function () { /* остаются статичные иконки */ });
+
+    hosts.forEach(function (host) {
+      if (!UA[host.getAttribute("data-ua")]) return;
+      var armed = false;
+
+      var wake = function () {
+        if (armed) return;
+        armed = true;
+        loadPlayer().then(function (lottie) {
+          if (lottie) mountIcon(host, lottie, true);
+        }).catch(function () { /* остаётся статичная иконка */ });
+      };
+
+      host.addEventListener("pointerenter", wake, { once: true });
+      host.addEventListener("focus", wake, { once: true });
+      host.addEventListener("click", wake, { once: true });
+    });
   }
 
-  if ("requestIdleCallback" in window) requestIdleCallback(upgradeIcons, { timeout: 2500 });
-  else window.setTimeout(upgradeIcons, 1200);
+  upgradeIcons();
 
   /* ---- Share и Copy link ----
      В шаринг уходит канонический URL статьи, а не адрес этого стенда. */

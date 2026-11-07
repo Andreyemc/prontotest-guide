@@ -1808,6 +1808,71 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
 }
 
 /* ==========================================================================
+   Шапка и меню: логотип — один элемент (раздел 5 спецификации)
+   ========================================================================== */
+
+/* Меню рисуется под шапкой, поэтому логотип не перерисовывается и не сдвигается:
+   у него меняются только цвет и трекинг. Белый текст на чёрном оптически
+   тяжелее, отсюда компенсация 0.3px. */
+
+.menu { z-index: 60; }
+.menu__nav { padding-top: calc(56px + 28px); }
+
+.header-m .logo {
+  transition: color var(--dur-base) var(--ease-out),
+    letter-spacing var(--dur-base) var(--ease-out);
+}
+
+body.is-menu-open .header-m {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+body.is-menu-open .header-m .logo {
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+body.is-menu-open .header-m .icon-round {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Бургер → крест (раздел 10): верх и низ поворачиваются на ±45°,
+   средняя линия исчезает. */
+
+.burger {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 14px;
+}
+
+.burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 240ms var(--ease-in-out), opacity 120ms linear;
+}
+
+.burger span:nth-child(1) { top: 0; }
+.burger span:nth-child(2) { top: 6px; }
+.burger span:nth-child(3) { top: 12px; }
+
+body.is-menu-open .burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+body.is-menu-open .burger span:nth-child(2) { opacity: 0; }
+body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .burger span { transition-duration: 150ms; }
+}
+
+/* ==========================================================================
    Скелетоны первого экрана (раздел 12 спецификации)
    ========================================================================== */
 
@@ -1945,10 +2010,6 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
   }
 }
 
-.body, .article-body { position: relative; }
-.is-preloading > *:not(.skeleton) { visibility: hidden; }
-.skeleton { transition: opacity 150ms linear; }
-.skeleton.is-out { opacity: 0; }
 
 /* ==========================================================================
    Анимированные иконки useAnimations (MIT) — Lottie поверх статичного SVG
@@ -2025,4 +2086,60 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
 .reveal--quick.is-in {
   animation-duration: var(--dur-slow);
   animation-delay: var(--delay-quick, 0ms);
+}
+
+/* ==========================================================================
+   Плейсхолдеры картинок (раздел 12: shimmer, но локально)
+   Мерцает только сам блок иллюстрации — заголовок, фильтры и текст карточки
+   показываются сразу и не прячутся из-за медленной картинки.
+   ========================================================================== */
+
+.tile__media,
+.article-hero,
+.mini__figure {
+  background-color: #e2e8f0;
+  background-image: linear-gradient(90deg, #e2e8f0 0%, #eef2f7 50%, #e2e8f0 100%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.4s linear infinite;
+}
+
+.tile__media img,
+.article-hero img,
+.mini__figure img {
+  opacity: 0;
+  transition: opacity 240ms var(--ease-out);
+}
+
+.is-ready {
+  background-image: none;
+  background-color: transparent;
+  animation: none;
+}
+
+.is-ready img { opacity: 1; }
+
+@keyframes sk-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* однотонные плитки картинки не показывают */
+.tile--solid .tile__media { background: none; animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tile__media,
+  .article-hero,
+  .mini__figure {
+    animation: sk-pulse 1.2s ease-in-out infinite;
+    background-image: none;
+  }
+
+  .tile__media img,
+  .article-hero img,
+  .mini__figure img { transition: none; }
+
+  @keyframes sk-pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
 }

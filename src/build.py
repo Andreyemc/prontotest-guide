@@ -336,72 +336,6 @@ def render_card(a, base, pos, hidden):
 
 
 
-# ---------------------------------------------------------------- скелетоны ---
-# Раздел 12: показывают первый экран, если данные не успели прийти.
-
-def _sk_tile(kind, solid=False):
-    media = "" if solid else '\n            <span class="sk sk-tile__media"></span>'
-    return f"""          <div class="sk-tile sk-tile--{kind}{' sk-tile--solid' if solid else ''}">{media}
-            <div class="sk-tile__body">
-              <div class="sk-tile__top">
-                <span class="sk sk--cat"></span>
-                <span class="sk sk--line" style="width:95%"></span>
-                <span class="sk sk--line" style="width:70%"></span>
-              </div>
-              <span class="sk sk--date"></span>
-            </div>
-          </div>"""
-
-
-def hub_skeleton():
-    pills = "\n".join(
-        f'          <span class="sk sk--pill" style="width:{len(label) * 8 + 28}px"></span>'
-        for _, label in CHIPS)
-    tiles = "\n".join([
-        _sk_tile("large"), _sk_tile("large"),
-        _sk_tile("small", solid=True), _sk_tile("small"), _sk_tile("small"),
-    ])
-    return f"""      <div class="skeleton" data-skeleton hidden aria-hidden="true">
-        <div class="skeleton__inner">
-          <div class="skeleton__head">
-            <span class="sk sk--title"></span>
-            <span class="sk sk--subtitle"></span>
-          </div>
-          <div class="filters skeleton__chips">
-{pills}
-          </div>
-          <div class="skeleton__grid">
-{tiles}
-          </div>
-        </div>
-      </div>"""
-
-
-def article_skeleton():
-    h1 = "\n".join(f'            <span class="sk sk--h1" style="width:{w}"></span>'
-                   for w in ("100%", "100%", "72%"))
-    lede = "\n".join(f'            <span class="sk sk--lede" style="width:{w}"></span>'
-                     for w in ("100%", "64%"))
-    text = "\n".join(f'            <span class="sk sk--text" style="width:{w}"></span>'
-                     for w in ("100%", "100%", "100%", "100%", "58%"))
-    return f"""      <div class="skeleton skeleton--article" data-skeleton hidden aria-hidden="true">
-        <div class="skeleton__panel">
-          <div class="skeleton__col">
-            <span class="sk sk--bar" style="width:220px;height:12px"></span>
-            <span class="sk sk--bar" style="width:300px"></span>
-{h1}
-{lede}
-            <span class="sk sk--avatar"></span>
-          </div>
-          <span class="sk sk--hero" style="display:block"></span>
-          <div class="skeleton__col" style="padding:20px 0 40px">
-            <span class="sk sk--bar" style="width:80%;height:12px"></span>
-{text}
-          </div>
-        </div>
-      </div>"""
-
-
 # --------------------------------------------------------------------- хаб ----
 
 def build_hub():
@@ -452,7 +386,6 @@ def build_hub():
 {GLOW}
 {header("")}
     <main class="body container">
-{hub_skeleton()}
       <div class="page-head">
         <h1 class="page-head__title">{e(HUB_TITLE)}</h1>
         <p class="page-head__desc">{e(HUB_DESC)}</p>
@@ -556,7 +489,6 @@ def build_article(a):
 {GLOW}
 {header(base)}
     <main class="article-body container">
-{article_skeleton()}
       <article class="panel">
         <header class="article-head measure">
           {eyebrow(ic, f"Guide · {label}")}
