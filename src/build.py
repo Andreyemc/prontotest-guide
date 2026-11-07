@@ -42,6 +42,14 @@ CATEGORY = {
     "carril-bici-girar-a-la-derecha": "right-of-way",
 }
 
+# «Шрифт заголовка плитки берётся из контента» (раздел 4 спецификации):
+# флаг взят из макета для тех десяти статей, что в нём нарисованы.
+DISPLAY_TITLE = {
+    "adelantar-ciclista-prohibido-adelantar",
+    "semaforo-verde-no-significa-entrar",
+    "aquaplaning-agua-en-la-rodada",
+}
+
 CATEGORIES = [
     ("traffic-rules", "Traffic rules", "book-cover"),
     ("traffic-signs", "Traffic signs", "warning-diamond"),
@@ -263,11 +271,11 @@ def footer(base):
 
 def menu(base):
     items = "\n".join(
-        '        <a class="menu__item{cls}" href="{href}" style="--i:{n}"><span>{label}</span>{chev}</a>'.format(
+        '        <a class="menu__item{cls}" href="{href}" style="--i:{n}">{label}</a>'.format(
             cls=" is-active" if active else "", href=href.format(base=base),
-            n=n, label=e(label), chev=icon("chevron-right"))
+            n=n, label=e(label))
         for n, (label, href, active) in enumerate(NAV))
-    return f"""  <div class="menu" id="menu" hidden>
+    return f"""  <div class="menu" id="menu">
     <nav class="menu__nav" aria-label="Mobile">
 {items}
     </nav>
@@ -306,13 +314,11 @@ def promo(base, button_label):
 # Раскладка bento из макета: ряд из двух больших, ряд из трёх малых,
 # фича во всю ширину, ещё ряд из трёх малых. Один цикл — девять карточек.
 ROWS = [
-    [("large", "img", "", False), ("large", "img", "", True)],
-    [("small", "solid", "soft", False), ("small", "img", "ink", False),
-     ("small", "img", "", False)],
-    [("full", "feature", "", True)],
-    [("small", "solid", "primary", True), ("small", "img", "", False),
-     ("small", "solid", "sun", False)],
-    [("large", "img", "", True)],
+    [("large", "img", ""), ("large", "img", "")],
+    [("small", "solid", "soft"), ("small", "img", "ink"), ("small", "img", "")],
+    [("full", "feature", "")],
+    [("small", "solid", "primary"), ("small", "img", ""), ("small", "solid", "sun")],
+    [("large", "img", "")],
 ]
 
 
@@ -328,14 +334,14 @@ CTA_TILE = f"""        <div class="tile tile--large tile--cta">
         </div>"""
 
 
-def tile_classes(i):
-    """Классы плитки по её позиции среди видимых карточек."""
+def tile_classes(i, display):
+    """Размер, вид и тон — от позиции в сетке; шрифт заголовка — от статьи."""
     flat = [c for row in ROWS for c in row]
-    size, kind, tone, display = flat[i % len(flat)]
+    size, kind, tone = flat[i % len(flat)]
     cls = ["tile", f"tile--{size}", f"tile--{kind}"]
     if tone:
         cls.append(f"tile--{tone}")
-    if display:
+    if display or kind == "feature":
         cls.append("tile--display")
     return " ".join(cls)
 
@@ -344,7 +350,9 @@ def render_card(a, base, pos, hidden):
     cat = CATEGORY[a["slug"]]
     label, ic = CAT_LABEL[cat]
     hid = " hidden" if hidden else ""
-    return f"""        <a class="{tile_classes(pos)}" href="{article_href(a['slug'], base)}" data-card data-category="{cat}"{hid}>
+    disp = a["slug"] in DISPLAY_TITLE
+    dattr = ' data-display="1"' if disp else ""
+    return f"""        <a class="{tile_classes(pos, disp)}" href="{article_href(a['slug'], base)}" data-card data-category="{cat}"{dattr}{hid}>
           <span class="tile__media"><img src="{a['cover']}" alt="" width="1200" height="675" loading="lazy" decoding="async"></span>
           <span class="tile__scrim"></span>
           <span class="tile__body">

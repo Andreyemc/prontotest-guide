@@ -361,6 +361,7 @@ figure {
 
 .header-m .logo {
   font-size: 18px;
+  letter-spacing: normal;
 }
 
 .header-m__icons {
@@ -982,7 +983,7 @@ figure {
   font-weight: 600;
 }
 
-.steps span {
+.steps li > span:last-child {
   font-size: 19px;
   line-height: 1.42;
   letter-spacing: -0.1px;
@@ -1273,7 +1274,10 @@ figure {
   color: #ffffff;
   visibility: hidden;
   opacity: 0;
+  pointer-events: none;
   transform: translateY(-8px);
+  /* свой слой, чтобы открытие шло на композиторе, а не на главном потоке */
+  will-change: transform, opacity;
   transition: opacity var(--dur-slow) var(--ease-out-quint),
     transform var(--dur-slow) var(--ease-out-quint), visibility 0s linear var(--dur-slow);
 }
@@ -1281,6 +1285,7 @@ figure {
 .menu.is-open {
   visibility: visible;
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
   transition: opacity var(--dur-slow) var(--ease-out-quint),
     transform var(--dur-slow) var(--ease-out-quint), visibility 0s;
@@ -1369,6 +1374,7 @@ figure {
   gap: 16px;
 }
 
+.menu__utility .badges { gap: 8px; }
 .menu__utility .badges img { width: 108px; height: 32px; }
 
 .menu__utility .lang {
@@ -1407,11 +1413,15 @@ body.is-locked { overflow: hidden; }
   .page-head__title { font-size: 56px; }
 
   .bento { grid-template-columns: repeat(2, 1fr); }
-  .bento > .tile { grid-column: span 1; min-height: 420px; }
+  .bento > .tile {
+    grid-column: span 1;
+    height: auto;
+    min-height: 420px;
+  }
   .bento > .tile--full,
   .bento > .tile--span6,
   .cta-row { grid-column: span 2; }
-  .bento > .tile--full { min-height: 460px; }
+  .bento > .tile--full { height: auto; min-height: 460px; }
 
   .tile--large .tile__media { height: 240px; }
   .tile--feature .tile__title { font-size: 32px; }
@@ -1499,10 +1509,15 @@ body.is-locked { overflow: hidden; }
   .bento > .tile--span3,
   .cta-row {
     grid-column: span 1;
+    height: auto;
     min-height: 0;
   }
 
-  .bento > .tile--full { min-height: 440px; }
+  .bento > .tile--full { height: 440px; }
+
+  /* на мобильном текст прижат к верху, дата идёт сразу под ним */
+  .tile__body { justify-content: flex-start; gap: 20px; }
+  .tile--feature .tile__body { justify-content: flex-end; }
 
   .tile--large .tile__media,
   .tile--small .tile__media,
@@ -1518,8 +1533,8 @@ body.is-locked { overflow: hidden; }
   .eyebrow__label { font-size: 12px; }
 
   .tile__title,
-  .tile--large .tile__title,
-  .tile--display .tile__title { font-size: 21px; letter-spacing: -0.2px; }
+  .tile--large .tile__title { font-size: 21px; line-height: 1.2; letter-spacing: -0.2px; }
+  .tile--display .tile__title { font-size: 21px; line-height: 1.05; letter-spacing: -0.2px; }
 
   .tile--primary.tile--display .tile__title { font-size: 24px; }
   .tile--feature .tile__title { font-size: 26px; }
@@ -2163,4 +2178,13 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
+}
+
+/* Мобильные размеры эйбрава — после базовых правил, иначе их перебивает
+   порядок объявления (фрейм esPUB: плашка 20, иконка 12, подпись 12). */
+
+@media (max-width: 767px) {
+  .eyebrow__tile { width: 20px; height: 20px; }
+  .eyebrow__tile .icon { font-size: 12px; }
+  .eyebrow__label { font-size: 12px; }
 }

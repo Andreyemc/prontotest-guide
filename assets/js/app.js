@@ -67,13 +67,11 @@
 
   if (bento) {
     var ROWS = [
-      [["large", "img", "", false], ["large", "img", "", true]],
-      [["small", "solid", "soft", false], ["small", "img", "ink", false],
-       ["small", "img", "", false]],
-      [["full", "feature", "", true]],
-      [["small", "solid", "primary", true], ["small", "img", "", false],
-       ["small", "solid", "sun", false]],
-      [["large", "img", "", true]]
+      [["large", "img", ""], ["large", "img", ""]],
+      [["small", "solid", "soft"], ["small", "img", "ink"], ["small", "img", ""]],
+      [["full", "feature", ""]],
+      [["small", "solid", "primary"], ["small", "img", ""], ["small", "solid", "sun"]],
+      [["large", "img", ""]]
     ];
     var SPAN_FOR_COUNT = { 1: "tile--span6", 2: "tile--span3" };
 
@@ -86,9 +84,11 @@
     var state = { category: "all", page: 1 };
 
     function setTile(el, spec, spanOverride) {
+      /* шрифт заголовка — свойство статьи, остальное задаёт позиция в сетке */
+      var display = el.hasAttribute("data-display") || spec[1] === "feature";
       el.className = "tile tile--" + spec[0] + " tile--" + spec[1] +
         (spec[2] ? " tile--" + spec[2] : "") +
-        (spec[3] ? " tile--display" : "") +
+        (display ? " tile--display" : "") +
         (spanOverride ? " " + spanOverride : "") +
         " reveal";
     }
@@ -240,14 +240,17 @@
 
   function openMenu() {
     if (!menu) return;
-    menu.hidden = false;
-    document.body.classList.add("is-locked", "is-menu-open");
+    /* сперва то, что видно: переход стартует в этом же кадре */
+    menu.classList.add("is-open");
+    document.body.classList.add("is-menu-open");
     if (toggleBtn) toggleBtn.setAttribute("aria-expanded", "true");
-    setBackgroundInert(true);
+
+    /* остальное — следующим кадром, чтобы не задерживать первый */
     requestAnimationFrame(function () {
-      menu.classList.add("is-open");
+      document.body.classList.add("is-locked");
+      setBackgroundInert(true);
       var first = menu.querySelector(".menu__item");
-      if (first) first.focus();
+      if (first) first.focus({ preventScroll: true });
     });
   }
 
@@ -258,11 +261,8 @@
     setBackgroundInert(false);
     if (toggleBtn) {
       toggleBtn.setAttribute("aria-expanded", "false");
-      toggleBtn.focus();
+      toggleBtn.focus({ preventScroll: true });
     }
-    window.setTimeout(function () {
-      if (!menu.classList.contains("is-open")) menu.hidden = true;
-    }, reduced ? 150 : 240);
   }
 
   if (toggleBtn) {
