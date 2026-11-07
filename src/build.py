@@ -76,17 +76,19 @@ NAV = [
     ("Team", "#", False),
 ]
 
+# Тексты футера — с прода (раздел «UI-строки» контент-спеки). Колонки Social
+# на проде нет, она из макета.
 FOOTER_COLS = [
     ("Product", ["Free DGT test", "Complete category B mock exam", "Traffic rules",
                  "Right of way", "Speed", "Download app"]),
-    ("ProntoTest", ["Home", "Guide", "Team", "Support"]),
+    ("ProntoTest", ["Home", "Team", "Support"]),
     ("Social", ["YouTube", "X", "LinkedIn", "Instagram"]),
     ("Legal", ["Privacy Policy", "Terms of Service", "Cookie settings"]),
 ]
 
-DISCLAIMER = ("ProntoTest is an independent study service and is not affiliated with the DGT. "
-              "Question bank reviewed by hand · July 2026 · Juan Manuel Llergo, driving "
-              "instructor. Passing our mock exams does not guarantee passing the official test.")
+COPYRIGHT = "© 2026 ProntoTest"
+DISCLAIMER_HTML = ("Question bank reviewed by hand · July 2026 · "
+                   '<a href="https://prontotest.net/en/equipo">Juan Manuel Llergo</a> · Driving instructor')
 
 HUB_TITLE = "Useful tips from ProntoTest"
 HUB_DESC = ("Real road situations in Spain explained step by step: what to look for, "
@@ -261,8 +263,8 @@ def footer(base):
       </div>
 
       <div class="footer__legal">
-        <p class="footer__copy">2026 © ProntoTest. All rights reserved</p>
-        <p class="footer__disclaimer">{e(DISCLAIMER)}</p>
+        <p class="footer__copy">{e(COPYRIGHT)}</p>
+        <p class="footer__disclaimer">{DISCLAIMER_HTML}</p>
       </div>
     </div>
   </footer>
@@ -275,7 +277,7 @@ def menu(base):
             cls=" is-active" if active else "", href=href.format(base=base),
             n=n, label=e(label))
         for n, (label, href, active) in enumerate(NAV))
-    return f"""  <div class="menu" id="menu">
+    return f"""  <div class="menu" id="menu" inert aria-hidden="true">
     <nav class="menu__nav" aria-label="Mobile">
 {items}
     </nav>
@@ -283,8 +285,8 @@ def menu(base):
       <a class="menu__cta" href="#">Get the app</a>
       <div class="menu__utility">
         <div class="badges">
-          <a href="#"><img src="{base}assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" loading="lazy"></a>
-          <a href="#"><img src="{base}assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" loading="lazy"></a>
+          <a href="#"><img src="{base}assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" decoding="async"></a>
+          <a href="#"><img src="{base}assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" decoding="async"></a>
         </div>
         <button class="lang" type="button">{icon("globe")}<span>EN</span></button>
       </div>
@@ -534,12 +536,10 @@ def build_article(a):
         </header>
 
         <figure class="article-hero">
-          <img src="{a['cover']}" alt="{e(a['coverCaption'])}" width="1200" height="675">
+          <img src="{a['animation']}" alt="{e(a['animationAlt'])}" width="1200" height="675">
         </figure>
 
-        <div class="article-column measure">
-          <p class="caption">{e(a['coverCaption'])}</p>
-
+        <div class="article-column article-column--last measure">
           <div class="text-block">
             <p>{e(a['intro'])}</p>
 
@@ -553,14 +553,6 @@ def build_article(a):
 {steps}
             </ol>
           </div>
-        </div>
-
-        <figure class="article-anim">
-          <img src="{a['animation']}" alt="{e(a['animationAlt'])}" width="1200" height="675" loading="lazy">
-        </figure>
-
-        <div class="article-end measure">
-          <p class="caption">{e(anim_caption(a))}</p>
         </div>
       </article>
 

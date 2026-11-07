@@ -1272,23 +1272,22 @@ figure {
   flex-direction: column;
   background: #000000;
   color: #ffffff;
-  visibility: hidden;
+  /* Закрытое меню не прячем через visibility: оно остаётся отрисованным в своём
+     слое, и открытие — это только opacity и transform на композиторе. Из дерева
+     доступности и порядка Tab его выводят inert и aria-hidden (см. app.js). */
   opacity: 0;
   pointer-events: none;
   transform: translateY(-8px);
-  /* свой слой, чтобы открытие шло на композиторе, а не на главном потоке */
   will-change: transform, opacity;
+  contain: layout style paint;
   transition: opacity var(--dur-slow) var(--ease-out-quint),
-    transform var(--dur-slow) var(--ease-out-quint), visibility 0s linear var(--dur-slow);
+    transform var(--dur-slow) var(--ease-out-quint);
 }
 
 .menu.is-open {
-  visibility: visible;
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
-  transition: opacity var(--dur-slow) var(--ease-out-quint),
-    transform var(--dur-slow) var(--ease-out-quint), visibility 0s;
 }
 
 .menu__header {
@@ -2187,4 +2186,12 @@ body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate
   .eyebrow__tile { width: 20px; height: 20px; }
   .eyebrow__tile .icon { font-size: 12px; }
   .eyebrow__label { font-size: 12px; }
+}
+
+/* Анимация стоит наверху статьи; второго медиа-блока нет, поэтому текстовая
+   колонка завершает панель с нижним отступом End Column из макета (56). */
+.article-column--last { padding-bottom: 56px; }
+
+@media (max-width: 767px) {
+  .article-column--last { padding-bottom: 32px; }
 }

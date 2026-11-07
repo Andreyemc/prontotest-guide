@@ -336,7 +336,7 @@
         <a class="pager__item" href="#" data-page="next"><span>Next</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
       </nav>
     </main>
-  <div class="menu" id="menu">
+  <div class="menu" id="menu" inert aria-hidden="true">
     <nav class="menu__nav" aria-label="Mobile">
         <a class="menu__item" href="#" style="--i:0">Free DGT test</a>
         <a class="menu__item is-active" href="index.html" style="--i:1">Guide</a>
@@ -351,8 +351,8 @@
       <a class="menu__cta" href="#">Get the app</a>
       <div class="menu__utility">
         <div class="badges">
-          <a href="#"><img src="assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" loading="lazy"></a>
-          <a href="#"><img src="assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" loading="lazy"></a>
+          <a href="#"><img src="assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" decoding="async"></a>
+          <a href="#"><img src="assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" decoding="async"></a>
         </div>
         <button class="lang" type="button"><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg><span>EN</span></button>
       </div>
@@ -380,7 +380,6 @@
           <h2 class="footer__col-title">PRONTOTEST</h2>
           <ul>
             <li><a class="footer__link" href="#">Home</a></li>
-            <li><a class="footer__link" href="#">Guide</a></li>
             <li><a class="footer__link" href="#">Team</a></li>
             <li><a class="footer__link" href="#">Support</a></li>
           </ul>
@@ -420,8 +419,8 @@
       </div>
 
       <div class="footer__legal">
-        <p class="footer__copy">2026 © ProntoTest. All rights reserved</p>
-        <p class="footer__disclaimer">ProntoTest is an independent study service and is not affiliated with the DGT. Question bank reviewed by hand · July 2026 · Juan Manuel Llergo, driving instructor. Passing our mock exams does not guarantee passing the official test.</p>
+        <p class="footer__copy">© 2026 ProntoTest</p>
+        <p class="footer__disclaimer">Question bank reviewed by hand · July 2026 · <a href="https://prontotest.net/en/equipo">Juan Manuel Llergo</a> · Driving instructor</p>
       </div>
     </div>
   </footer>

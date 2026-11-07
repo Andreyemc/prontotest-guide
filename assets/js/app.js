@@ -238,27 +238,41 @@
     });
   }
 
+  var openTimer = 0;
+
   function openMenu() {
     if (!menu) return;
-    /* сперва то, что видно: переход стартует в этом же кадре */
+    /* слой меню уже отрисован, так что здесь только композитор */
+    menu.removeAttribute("inert");
+    menu.removeAttribute("aria-hidden");
     menu.classList.add("is-open");
     document.body.classList.add("is-menu-open");
     if (toggleBtn) toggleBtn.setAttribute("aria-expanded", "true");
 
-    /* остальное — следующим кадром, чтобы не задерживать первый */
-    requestAnimationFrame(function () {
+    /* тяжёлое — после того как переход отыграл: inert на весь контент и
+       блокировка скролла вызывают перераскладку всей страницы */
+    window.clearTimeout(openTimer);
+    openTimer = window.setTimeout(function () {
+      if (!menu.classList.contains("is-open")) return;
       document.body.classList.add("is-locked");
       setBackgroundInert(true);
       var first = menu.querySelector(".menu__item");
       if (first) first.focus({ preventScroll: true });
-    });
+    }, reduced ? 150 : 320);
   }
 
   function closeMenu() {
     if (!menu || !menu.classList.contains("is-open")) return;
+    window.clearTimeout(openTimer);
     menu.classList.remove("is-open");
     document.body.classList.remove("is-locked", "is-menu-open");
     setBackgroundInert(false);
+    /* убираем из дерева доступности, когда панель уже исчезла */
+    window.setTimeout(function () {
+      if (menu.classList.contains("is-open")) return;
+      menu.setAttribute("inert", "");
+      menu.setAttribute("aria-hidden", "true");
+    }, reduced ? 150 : 240);
     if (toggleBtn) {
       toggleBtn.setAttribute("aria-expanded", "false");
       toggleBtn.focus({ preventScroll: true });
