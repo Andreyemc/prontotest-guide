@@ -41,12 +41,22 @@
           entry.target.classList.add("is-in");
           io.unobserve(entry.target);
         });
-      }, { threshold: 0.15 });
+      }, { threshold: 0.15, rootMargin: "0px 0px 12% 0px" });
     }
     nodes.forEach(function (el) { io.observe(el); });
   }
 
   reveal(Array.prototype.slice.call(document.querySelectorAll(".reveal")));
+
+  /* После первой отрисовки каскад короче: длинная задержка уместна на монтаже
+     первого экрана, но при прокрутке читается как подгрузка. */
+  window.setTimeout(function () {
+    document.querySelectorAll(".reveal:not(.is-in)").forEach(function (el) {
+      el.classList.add("reveal--quick");
+      var d = parseInt(el.style.getPropertyValue("--delay"), 10) || 0;
+      el.style.setProperty("--delay-quick", Math.min(d, 120) + "ms");
+    });
+  }, 900);
 
   /* ---- Хаб: фильтр по темам и пагинация ----
      Раскладка bento из макета: ряд из двух больших, ряд из трёх малых, фича во
@@ -71,6 +81,8 @@
     var pager = document.querySelector("[data-pager]");
     var chipGroup = document.querySelector(".chips");
     var empty = null;
+    var booted = false;
+    window.setTimeout(function () { booted = true; }, 900);
     var state = { category: "all", page: 1 };
 
     function setTile(el, spec, spanOverride) {
@@ -137,7 +149,12 @@
         for (var k = 0; k < take; k++) {
           var el = slice[i + k];
           setTile(el, spec[k], override);
-          el.style.setProperty("--delay", Math.min((i + k) * 60, 300) + "ms");
+          var d = Math.min((i + k) * 60, 300);
+          el.style.setProperty("--delay", d + "ms");
+          if (booted) {
+            el.classList.add("reveal--quick");
+            el.style.setProperty("--delay-quick", Math.min(d, 120) + "ms");
+          }
           el.hidden = false;
           fresh.push(el);
         }
@@ -199,12 +216,19 @@
 
   if (skeleton) {
     var scope = skeleton.parentElement;
-    var SHOW_AFTER = 120, MIN_SHOW = 300, CAP = 4000;
+    var SHOW_AFTER = 120, MIN_SHOW = 300, CAP = 1200;
     var shownAt = 0;
     var finished = false;
 
+    /* Ждём только картинки первого экрана: ниже фолда скелетона всё равно нет,
+       и держать его из-за них — это как раз «долгий скелетон на ровном месте». */
+    var fold = window.innerHeight;
     var watched = Array.prototype.slice.call(
-      scope.querySelectorAll(".tile:not([hidden]) img, .article-hero img"));
+      scope.querySelectorAll(".tile:not([hidden]) img, .article-hero img"))
+      .filter(function (img) {
+        var r = img.getBoundingClientRect();
+        return r.top < fold && r.bottom > 0;
+      });
 
     function pending() {
       return watched.some(function (img) {
@@ -263,19 +287,44 @@
   var menu = document.getElementById("menu");
   var toggleBtn = document.querySelector("[data-menu-toggle]");
 
+  var pageMain = document.querySelector("main");
+  var deskHeader = document.querySelector(".header");
+
+  function setBackgroundInert(on) {
+    [pageMain, deskHeader].forEach(function (el) {
+      if (!el) return;
+      if (on) {
+        el.setAttribute("inert", "");
+        el.setAttribute("aria-hidden", "true");
+      } else {
+        el.removeAttribute("inert");
+        el.removeAttribute("aria-hidden");
+      }
+    });
+  }
+
   function openMenu() {
     if (!menu) return;
     menu.hidden = false;
-    requestAnimationFrame(function () { menu.classList.add("is-open"); });
     document.body.classList.add("is-locked", "is-menu-open");
     if (toggleBtn) toggleBtn.setAttribute("aria-expanded", "true");
+    setBackgroundInert(true);
+    requestAnimationFrame(function () {
+      menu.classList.add("is-open");
+      var first = menu.querySelector(".menu__item");
+      if (first) first.focus();
+    });
   }
 
   function closeMenu() {
     if (!menu || !menu.classList.contains("is-open")) return;
     menu.classList.remove("is-open");
     document.body.classList.remove("is-locked", "is-menu-open");
-    if (toggleBtn) toggleBtn.setAttribute("aria-expanded", "false");
+    setBackgroundInert(false);
+    if (toggleBtn) {
+      toggleBtn.setAttribute("aria-expanded", "false");
+      toggleBtn.focus();
+    }
     window.setTimeout(function () {
       if (!menu.classList.contains("is-open")) menu.hidden = true;
     }, reduced ? 150 : 240);
