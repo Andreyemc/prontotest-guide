@@ -173,7 +173,6 @@ figure {
 .page {
   position: relative;
   isolation: isolate;
-  overflow-x: clip;
 }
 
 .icon {
@@ -339,7 +338,7 @@ figure {
 .header-m {
   position: sticky;
   top: 0;
-  z-index: 40;
+  z-index: 70;
   display: none;
   height: 56px;
   align-items: center;
@@ -510,11 +509,16 @@ figure {
   gap: 40px;
 }
 
-.bento > .tile--large { grid-column: span 3; min-height: 560px; }
-.bento > .tile--small { grid-column: span 2; min-height: 420px; }
-.bento > .tile--full  { grid-column: span 6; min-height: 600px; }
+.bento__empty {
+  grid-column: span 6;
+  padding: 48px 0;
+  font-size: 19px;
+  color: var(--muted);
+}
 
-/* ---------- Tile ---------- */
+/* ---------- Tile ----------
+   Одна разметка на все варианты: вид задаётся классами, поэтому сетку можно
+   пересобирать на лету при фильтрации и пагинации. */
 
 .tile {
   position: relative;
@@ -529,31 +533,50 @@ figure {
     background-color var(--dur-slow) var(--ease-out-quint);
 }
 
+.tile[hidden] { display: none; }
+
 .tile:hover {
   transform: var(--lift);
   box-shadow: var(--shadow-hover);
-  transition-duration: var(--dur-slow);
 }
 
 .tile:active { transform: scale(0.985); transition-duration: var(--dur-fast); }
 
-.tile__figure {
+/* размеры */
+
+.tile--large { grid-column: span 3; min-height: 560px; }
+.tile--small { grid-column: span 2; min-height: 420px; }
+.tile--full  { grid-column: span 6; min-height: 600px; }
+.tile--span6 { grid-column: span 6; }
+.tile--span3 { grid-column: span 3; }
+
+/* медиа */
+
+.tile__media {
+  position: relative;
   flex: none;
   overflow: hidden;
 }
 
-.tile__img {
+.tile__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform var(--dur-slow) var(--ease-out-quint);
 }
 
-.tile:hover .tile__img { transform: var(--img-zoom); }
+.tile:hover .tile__media img { transform: var(--img-zoom); }
 
-.tile--large .tile__figure { height: 326px; }
-.tile--small .tile__figure { height: 210px; }
-.tile--dark .tile__figure { height: 230px; }
+.tile--large .tile__media { height: 326px; }
+.tile--small .tile__media { height: 210px; }
+.tile--small.tile--ink .tile__media { height: 230px; }
+
+.tile--solid .tile__media,
+.tile--solid .tile__scrim { display: none; }
+
+.tile__scrim { display: none; }
+
+/* тело */
 
 .tile__body {
   display: flex;
@@ -572,45 +595,17 @@ figure {
   gap: 8px;
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.eyebrow__tile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: var(--fill-glass);
-  color: var(--ink);
-}
-
-.eyebrow__tile .icon { font-size: 13px; }
-
-.eyebrow__label {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 .tile__title {
   font-size: 21px;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.2px;
-  color: var(--ink);
+  color: inherit;
 }
 
 .tile--large .tile__title { font-size: 24px; line-height: 1.17; }
 
-.tile__title--display {
+.tile--display .tile__title {
   font-family: var(--font-display);
   font-kerning: none;
   font-weight: 700;
@@ -620,8 +615,6 @@ figure {
   text-transform: uppercase;
 }
 
-.tile--large .tile__title--display { font-size: 26px; line-height: 1.05; }
-
 .tile__date {
   font-size: 14px;
   font-weight: 600;
@@ -630,50 +623,34 @@ figure {
 
 .tile--large .tile__date { font-size: 17px; }
 
-/* dark tile */
+/* тона */
 
-.tile--dark {
-  background: var(--ink);
-  color: #ffffff;
-}
-
-.tile--dark .tile__title { color: #ffffff; }
-.tile--dark .eyebrow__tile { background: rgba(255, 255, 255, 0.2); color: #ffffff; }
-.tile--dark .eyebrow__label { color: #ffffffa6; }
-.tile--dark .tile__date { color: #ffffffa6; }
-.tile--dark:hover { background: #16233f; }
-
-/* solid tiles */
-
-.tile--solid {
-  justify-content: space-between;
-  gap: 24px;
-  padding: 24px;
-}
-
-.tile--solid.tile--large { padding: 32px; }
 .tile--soft { background: var(--primary-soft); }
 .tile--soft:hover { background: #cadffd; }
 .tile--sun { background: var(--sun-soft); }
 .tile--sun:hover { background: var(--sun-band); }
 
-.tile--primary {
-  background: var(--primary);
+.tile--ink { background: var(--ink); color: #ffffff; }
+.tile--ink:hover { background: #16233f; }
+
+.tile--primary { background: var(--primary); color: #ffffff; }
+.tile--primary:hover { background: var(--primary-hover); }
+
+.tile--ink .eyebrow__tile,
+.tile--primary .eyebrow__tile,
+.tile--feature .eyebrow__tile {
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
 }
 
-.tile--primary:hover { background: var(--primary-hover); }
-.tile--primary .tile__title { color: #ffffff; }
-.tile--primary .eyebrow__tile { background: rgba(255, 255, 255, 0.2); color: #ffffff; }
-.tile--primary .eyebrow__label { color: #ffffffb3; }
+.tile--ink .eyebrow__label,
+.tile--ink .tile__date { color: #ffffffa6; }
+.tile--primary .eyebrow__label,
 .tile--primary .tile__date { color: #ffffffb3; }
 
-/* feature tile */
+/* фича: картинка во всю плитку, текст поверх */
 
 .tile--feature {
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 36px;
   color: #ffffff;
   background-color: var(--ink);
 }
@@ -681,19 +658,12 @@ figure {
 .tile--feature .tile__media {
   position: absolute;
   inset: 0;
+  height: auto;
   z-index: 0;
 }
 
-.tile--feature .tile__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--dur-slow) var(--ease-out-quint);
-}
-
-.tile--feature:hover .tile__media img { transform: var(--img-zoom); }
-
 .tile--feature .tile__scrim {
+  display: block;
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -701,60 +671,28 @@ figure {
   transition: opacity var(--dur-slow) var(--ease-out-quint);
 }
 
-.tile--feature:hover .tile__scrim { opacity: 1.06; }
-.tile--feature > .eyebrow,
-.tile--feature > .tile__title,
-.tile--feature > .tile__date { position: relative; z-index: 2; }
+.tile--feature .tile__body {
+  position: relative;
+  z-index: 2;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 36px;
+}
 
-.tile--feature .eyebrow__tile { background: rgba(255, 255, 255, 0.2); color: #ffffff; }
-.tile--feature .eyebrow__label { color: #ffffffd9; }
+.tile--feature .tile__top { gap: 10px; }
 
 .tile--feature .tile__title {
   max-width: 900px;
-  font-family: var(--font-display);
-  font-kerning: none;
-  font-weight: 700;
   font-size: 40px;
   line-height: 1.02;
-  letter-spacing: -0.3px;
-  text-transform: uppercase;
-  color: #ffffff;
 }
 
+.tile--feature .eyebrow__label { color: #ffffffd9; }
 .tile--feature .tile__date { font-size: 17px; color: #ffffffd9; }
 
-/* CTA tile */
+/* CTA-полоса под сеткой (компонент promo из макета статьи) */
 
-.tile--cta {
-  justify-content: space-between;
-  padding: 32px;
-  background: var(--ink);
-  color: #ffffff;
-}
-
-.tile--cta:hover { background: var(--ink-hover); }
-
-.tile--cta .tile__top { gap: 10px; }
-.tile--cta .eyebrow__tile { background: rgba(255, 255, 255, 0.2); color: #ffffff; }
-
-.tile--cta .eyebrow__label {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.28px;
-  text-transform: none;
-  color: #ffffffd9;
-}
-
-.tile--cta .tile__title {
-  font-family: var(--font-display);
-  font-kerning: none;
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1.05;
-  letter-spacing: -0.3px;
-  text-transform: uppercase;
-  color: #ffffff;
-}
+.cta-row { grid-column: span 6; }
 
 /* ---------- Buttons ---------- */
 
@@ -1477,11 +1415,14 @@ body.is-locked { overflow: hidden; }
   .page-head__title { font-size: 56px; }
 
   .bento { grid-template-columns: repeat(2, 1fr); }
-  .bento > .tile--large,
-  .bento > .tile--small { grid-column: span 1; min-height: 420px; }
-  .bento > .tile--full { grid-column: span 2; min-height: 460px; }
+  .bento > .tile { grid-column: span 1; min-height: 420px; }
+  .bento > .tile--full,
+  .bento > .tile--span6,
+  .bento__empty,
+  .cta-row { grid-column: span 2; }
+  .bento > .tile--full { min-height: 460px; }
 
-  .tile--large .tile__figure { height: 240px; }
+  .tile--large .tile__media { height: 240px; }
   .tile--feature .tile__title { font-size: 32px; }
 
   .more__row { grid-template-columns: repeat(2, 1fr); }
@@ -1562,29 +1503,26 @@ body.is-locked { overflow: hidden; }
     gap: 24px;
   }
 
-  .bento > .tile--large,
-  .bento > .tile--small,
-  .bento > .tile--full {
+  .bento > .tile,
+  .bento > .tile--full,
+  .bento > .tile--span6,
+  .bento > .tile--span3,
+  .bento__empty,
+  .cta-row {
     grid-column: span 1;
     min-height: 0;
   }
 
   .bento > .tile--full { min-height: 440px; }
 
-  .tile--large .tile__figure,
-  .tile--small .tile__figure,
-  .tile--dark .tile__figure { height: 192px; }
+  .tile--large .tile__media,
+  .tile--small .tile__media,
+  .tile--small.tile--ink .tile__media { height: 192px; }
 
   .tile__body,
-  .tile--large .tile__body,
-  .tile--solid,
-  .tile--solid.tile--large,
-  .tile--cta { padding: 24px; gap: 20px; }
-
-  .tile--solid,
-  .tile--cta { gap: 40px; }
-
-  .tile--feature { padding: 24px; }
+  .tile--large .tile__body { padding: 24px; gap: 20px; }
+  .tile--solid .tile__body { gap: 40px; }
+  .tile--feature .tile__body { padding: 24px; }
 
   .eyebrow__tile { width: 20px; height: 20px; }
   .eyebrow__tile .icon { font-size: 12px; }
@@ -1592,18 +1530,16 @@ body.is-locked { overflow: hidden; }
 
   .tile__title,
   .tile--large .tile__title,
-  .tile__title--display,
-  .tile--large .tile__title--display { font-size: 21px; letter-spacing: -0.2px; }
+  .tile--display .tile__title { font-size: 21px; letter-spacing: -0.2px; }
 
-  .tile--primary .tile__title--display { font-size: 24px; }
+  .tile--primary.tile--display .tile__title { font-size: 24px; }
   .tile--feature .tile__title { font-size: 26px; }
-  .tile--cta .tile__title { font-size: 24px; }
 
   .tile__date,
   .tile--large .tile__date,
   .tile--feature .tile__date { font-size: 14px; }
 
-  .tile--dark .eyebrow__label { color: #ffffffd9; }
+  .tile--ink .eyebrow__label { color: #ffffffd9; }
 
   /* article */
   .article-body {
@@ -1738,10 +1674,312 @@ body.is-locked { overflow: hidden; }
   .btn-secondary:active,
   .chip:active { transform: none; }
 
-  .tile:hover .tile__img,
-  .tile--feature:hover .tile__media img,
+  .tile:hover .tile__media img,
   .mini:hover .mini__figure img { transform: none; }
 
   .reveal { opacity: 1; transform: none; }
   .article-hero img { animation: none; }
 }
+
+/* ==========================================================================
+   Раздел Guide: хаб с пагинацией и фильтром, страница статьи
+   ========================================================================== */
+
+.more__row--two { grid-template-columns: repeat(2, 1fr); }
+
+.head-row--end {
+  padding-top: 4px;
+  justify-content: flex-start;
+}
+
+.eyebrow--plain .eyebrow__label {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.28px;
+  text-transform: none;
+}
+
+/* анимация-обложка: 16:9 без обрезки (спека раздела «Анимации») */
+.article-hero img {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.pager__item[aria-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+@media (max-width: 1099px) {
+  .more__row--two { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .more__row--two { grid-template-columns: 1fr; }
+  .article-hero img { aspect-ratio: 16 / 9; height: auto; }
+  .head-row--end { padding-top: 0; }
+}
+
+/* ---------- Eyebrow (плашка иконки + категория) ---------- */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eyebrow__tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--fill-glass);
+  color: var(--ink);
+}
+
+.eyebrow__tile .icon { font-size: 13px; }
+
+.eyebrow__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   Шапка и меню: логотип — один элемент (раздел 5 спецификации)
+   ========================================================================== */
+
+/* Меню рисуется под шапкой, поэтому логотип не перерисовывается и не сдвигается:
+   у него меняются только цвет и трекинг. Белый текст на чёрном оптически
+   тяжелее, отсюда компенсация 0.3px. */
+
+.menu { z-index: 60; }
+.menu__nav { padding-top: calc(56px + 28px); }
+
+.header-m .logo {
+  transition: color var(--dur-base) var(--ease-out),
+    letter-spacing var(--dur-base) var(--ease-out);
+}
+
+body.is-menu-open .header-m {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+body.is-menu-open .header-m .logo {
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+body.is-menu-open .header-m .icon-round {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Бургер → крест (раздел 10): верх и низ поворачиваются на ±45°,
+   средняя линия исчезает. */
+
+.burger {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 14px;
+}
+
+.burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 240ms var(--ease-in-out), opacity 120ms linear;
+}
+
+.burger span:nth-child(1) { top: 0; }
+.burger span:nth-child(2) { top: 6px; }
+.burger span:nth-child(3) { top: 12px; }
+
+body.is-menu-open .burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+body.is-menu-open .burger span:nth-child(2) { opacity: 0; }
+body.is-menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .burger span { transition-duration: 150ms; }
+}
+
+/* ==========================================================================
+   Скелетоны первого экрана (раздел 12 спецификации)
+   ========================================================================== */
+
+/* Скелетон лежит поверх контента и показывается только если первый экран
+   не успел прийти за 120 мс. Без JS его нет вовсе. */
+
+.skeleton[hidden] { display: none; }
+
+.skeleton {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 5;
+  padding-top: 48px;
+}
+
+.skeleton__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.sk {
+  border-radius: 7px;
+  background-image: linear-gradient(90deg, #e2e8f0 0%, #eef2f7 50%, #e2e8f0 100%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.4s linear infinite;
+}
+
+@keyframes sk-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.sk--title { width: min(820px, 100%); height: 64px; border-radius: 14px; }
+.sk--subtitle { width: min(520px, 100%); height: 22px; }
+.sk--pill { height: 35px; border-radius: var(--radius-pill); }
+.sk--bar { height: 14px; }
+
+.skeleton__head { display: flex; flex-direction: column; gap: 12px; }
+.skeleton__chips { display: flex; gap: 2px; padding: 8px; }
+
+.skeleton__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 40px;
+}
+
+.sk-tile {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-tile);
+  background: var(--surface);
+}
+
+.sk-tile--large { grid-column: span 3; height: 560px; }
+.sk-tile--small { grid-column: span 2; height: 420px; }
+.sk-tile--solid { background: #e8edf3; }
+
+.sk-tile__media { flex: none; height: 326px; }
+.sk-tile--small .sk-tile__media { height: 210px; }
+
+.sk-tile__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px;
+}
+
+.sk-tile--small .sk-tile__body { padding: 24px; }
+
+.sk-tile__top { display: flex; flex-direction: column; gap: 10px; }
+.sk--cat { width: 110px; height: 12px; }
+.sk--line { height: 18px; }
+.sk--date { width: 90px; height: 12px; }
+
+/* статья */
+
+.skeleton--article { padding-top: 48px; }
+
+.skeleton__panel {
+  width: min(980px, 100%);
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.skeleton__col {
+  width: min(660px, 100%);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 56px 0 36px;
+}
+
+.sk--h1 { height: 44px; }
+.sk--lede { height: 20px; }
+.sk--avatar { width: 36px; height: 36px; border-radius: var(--radius-pill); }
+.sk--hero { height: 551px; border-radius: 0; }
+.sk--text { height: 16px; }
+
+@media (max-width: 1099px) {
+  .skeleton__grid { grid-template-columns: repeat(2, 1fr); }
+  .sk-tile--large, .sk-tile--small { grid-column: span 1; height: 420px; }
+  .sk-tile__media { height: 240px; }
+  .sk--hero { height: auto; aspect-ratio: 16 / 9; }
+}
+
+@media (max-width: 767px) {
+  .skeleton { padding-top: 24px; }
+  .skeleton__inner { gap: 24px; }
+  .sk--title { height: 44px; }
+  .skeleton__grid { grid-template-columns: 1fr; gap: 24px; }
+  .sk-tile--large, .sk-tile--small { grid-column: span 1; height: 380px; }
+  .sk-tile__media { height: 192px; }
+  .sk-tile__body { padding: 24px; }
+  .skeleton__col { padding: 24px; }
+  .sk--h1 { height: 32px; }
+  .sk--text { height: 14px; }
+  .skeleton__panel { width: 100%; border-radius: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk {
+    animation: sk-pulse 1.2s ease-in-out infinite;
+    background-image: none;
+    background-color: #e2e8f0;
+  }
+  @keyframes sk-pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+}
+
+.body, .article-body { position: relative; }
+.is-preloading > *:not(.skeleton) { visibility: hidden; }
+.skeleton { transition: opacity 150ms linear; }
+.skeleton.is-out { opacity: 0; }
+
+/* ==========================================================================
+   Анимированные иконки useAnimations (MIT) — Lottie поверх статичного SVG
+   ========================================================================== */
+
+.ua {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
+  flex: none;
+  font-size: inherit;
+}
+
+.ua svg { width: 100%; height: 100%; display: block; }
+.ua svg path { stroke: currentColor; }
+
+/* статичная иконка остаётся до апгрейда и при prefers-reduced-motion */
+.has-ua > .icon,
+.has-ua > .burger { display: none; }
+
+.btn-glass .ua,
+.icon-round .ua { font-size: 18px; }
+.btn-secondary .ua,
+.pager__item .ua { font-size: 14px; }
+.lang .ua { font-size: 18px; }

@@ -1,0 +1,555 @@
+[
+  {
+    "n": 1,
+    "slug": "averia-en-autovia-baliza-v16",
+    "title": "Broken down on the motorway: beacon on the roof, everyone behind the barrier",
+    "metaTitle": "Breakdown on an autovía: where the V-16 beacon goes | ProntoTest",
+    "takeaway": "Put the beacon on the roof from inside the car. Then everyone gets behind the barrier instead of standing on the shoulder.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/averia-en-autovia-baliza-v16/anim-6ffef2404c93715a.svg",
+    "animationAlt": "Animation, top view: an orange car pulls onto the right-hand shoulder of an autovía, a V-16 beacon lights up on its roof and the people move behind the barrier",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/averia-en-autovia-baliza-v16/cover-71a911239a675b92.webp",
+    "coverCaption": "Top view: an orange car pulling off an autovía lane onto the right-hand shoulder, beside the barrier and an autovía sign",
+    "loop": 13.6,
+    "intro": "You're driving along an autovía (a Spanish dual carriageway) at dusk. The car loses power, the next exit is a long way off, and you coast onto the right-hand shoulder. Behind you the traffic is doing 120 km/h. You have two passengers with you, and the V-16 beacon and the hi-vis vest are in the glovebox.",
+    "notice": [
+      "At dusk a car on the shoulder is spotted late: the traffic behind will be level with you within seconds.",
+      "Someone will only swerve round you at the last moment and may clip you.",
+      "Nobody has to stop and help: count on the breakdown service and 112.",
+      "If someone does stop beside you “to help”, they'll end up in the middle of the shoulder and become a hazard themselves."
+    ],
+    "action": "While the car is still rolling, get it out of the running lanes: take the exit if there is one; if not, stop on the right-hand shoulder as far to the right as you can. Then switch on the hazard lights and sidelights, and put the vest on while you're still inside. Switch the beacon on and put it on the roof through the window without getting out: that's why it belongs in the glovebox, not the boot. The beacon must be a connected one (sending data to DGT 3.0): since 1 January 2026 only these are valid, and warning triangles are no longer used. Everyone gets out through the right-hand doors, the driver too, and goes straight behind the barrier. If there's no safe place behind the barrier, stay in the car with your seatbelts on and call 112.",
+    "moreTips": [
+      2,
+      3
+    ]
+  },
+  {
+    "n": 2,
+    "slug": "glorieta-dos-carriles-salida",
+    "title": "Why you leave a roundabout only from the right-hand lane",
+    "metaTitle": "Why you leave a roundabout only from the right-hand lane | ProntoTest",
+    "takeaway": "Leave the roundabout only from the outer (right-hand) lane: move into it early, one or two exits before yours.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/glorieta-dos-carriles-salida/anim-1787a09af8dbdaed.svg",
+    "animationAlt": "Animation, top view: an orange car on a two-lane roundabout moves into the outer lane early and leaves at the third exit",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/glorieta-dos-carriles-salida/cover-a10caa919aac8875.webp",
+    "coverCaption": "Top view: an orange car on a two-lane roundabout, with a red line showing its path into the outer lane and out at the third exit",
+    "loop": 12.4,
+    "intro": "You're in the inner lane of a two-lane roundabout. You need the third exit, and it's already in sight. Traffic is heavy: on your right, cars keep coming onto the ring and straight off again at the exits, and the outer lane beside you is full.",
+    "notice": [
+      "The driver in the outer lane doesn't have to let you in, even if your exit is just a couple of metres away.",
+      "Someone may leave the roundabout straight from the inner lane, right into the space you wanted to move into.",
+      "A car coming onto the roundabout may not see you and pull up right in front of you.",
+      "A lorry or a bus takes up both lanes of the ring at once: you can't get past it on the inside, you'll have to follow it round."
+    ],
+    "action": "On the approach, check how many lanes the roundabout has and which exits each one leads to: if there are arrows painted at the entry, pick your lane by them. Then count off the exits: if yours isn't the first, start moving into the outer lane early, with your right indicator on and only when you can see a clear space. If there's no space, don't squeeze in or cut across the next lane to take your exit: drive past and go round again, which costs you half a minute.",
+    "moreTips": [
+      1,
+      3
+    ]
+  },
+  {
+    "n": 3,
+    "slug": "adelantar-ciclista-prohibido-adelantar",
+    "title": "A solid line and a cyclist ahead: overtake or wait?",
+    "metaTitle": "A solid line and a cyclist ahead: overtake or wait? | ProntoTest",
+    "takeaway": "You may overtake a cyclist across a solid line and even where overtaking is banned, as long as you can see a long way along the oncoming lane. Leave at least 1.5 metres to the side, and outside built-up areas stay at least 20 km/h below the limit.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/adelantar-ciclista-prohibido-adelantar/anim-e44c0433d91f676e.svg",
+    "animationAlt": "Animation, top view: an orange car overtakes a cyclist across the solid line, leaving a metre and a half to the side while the oncoming lane is clear",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/adelantar-ciclista-prohibido-adelantar/cover-18725bf9efafecff.webp",
+    "coverCaption": "Top view: an orange car behind a cyclist on a road with a solid centre line, an oncoming car ahead and a no-overtaking sign",
+    "loop": 13.1,
+    "intro": "A country road, one lane each way. There's a solid line down the middle, and a little way back there was an R-305 “No overtaking” sign. Ahead of you a cyclist is doing about 20 km/h. Three cars have already stacked up behind you.",
+    "notice": [
+      "The driver behind may read the sign their own way and pull out to overtake you both at once.",
+      "The cyclist isn't looking back and may drift half a metre to the left because of a pothole or the wind.",
+      "An oncoming car may come over a crest before you've had time to get back into your lane.",
+      "The driver behind isn't expecting you to slow down and closes right up, while you'll have to start the overtake from a low speed."
+    ],
+    "action": "The R-305 “No overtaking” sign bans overtaking and the solid line bans crossing it; cyclists are an exception, because passing one takes only seconds. You may overtake only if you can see a long way along the oncoming lane: then check your mirrors and over your shoulder, put your left indicator on, move partly into the oncoming lane and keep at least a metre and a half from the cyclist. Outside built-up areas, from 1 October 2026, slow down before you start: the whole overtake must be at least 20 km/h below the limit, so with 90 on the sign, no faster than 70. Pull back into your lane once you can see the whole cyclist in the rear-view mirror. If the view is short or the cyclist is going fast, stay behind. The exception only covers slow road users such as a bicycle, a moped, an e-scooter or a tractor; motorbikes and cars are not overtaken across a solid line.",
+    "moreTips": [
+      2,
+      4
+    ]
+  },
+  {
+    "n": 4,
+    "slug": "luces-antiniebla-cuando-encender",
+    "title": "Fog lights in a downpour: when the rear one helps and when it dazzles",
+    "metaTitle": "Fog lights: when to use the front and the rear | ProntoTest",
+    "takeaway": "In heavy rain, switch on your dipped beam. The rear fog light only when there's almost no visibility left.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/luces-antiniebla-cuando-encender/anim-93dc0e6e98370f83.svg",
+    "animationAlt": "Animation, top view: a road in heavy rain where the orange car’s rear fog light dazzles the driver behind; dipped-beam and fog-light symbols alongside",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/luces-antiniebla-cuando-encender/cover-fa8f74c3871547dd.webp",
+    "coverCaption": "Top view: cars in heavy rain with their headlights on, the orange one showing a rear fog light; light symbols at the side",
+    "loop": 13.2,
+    "intro": "On the motorway in a downpour. Lorries throw up spray, visibility is poor, and ahead there's a steady red light: either a brake light or someone's forgotten rear fog light. Your headlights are already on, a car is sitting close behind you, and your hand is reaching to switch on both fog lights.",
+    "notice": [
+      "Someone else's rear fog light looks almost like a brake light: get used to a steady red glow ahead and you'll notice too late that the car is braking.",
+      "In the spray your car is hard to see, and someone overtaking may pull back in too early, right in front of you.",
+      "A rear fog light dazzles the driver behind: it's harder for them to judge how far away you are and when you're braking.",
+      "Front fog lights only light up the road just ahead: in the spray they show you the edge of the road, not what's further on."
+    ],
+    "action": "In fog, heavy rain, snow, smoke or dust, switch your lights on: dipped beam, main beam or the front fog light. The front fog light can be used on its own or together with the dipped beam, and also without any fog on a narrow winding road: a carriageway up to 6.5 metres wide with a P-14a or P-14b “Dangerous bends” sign. Switch the rear one on only in particularly bad conditions: thick fog, very heavy rain, heavy snow, dense dust or smoke. If you can see the edge of the road and the lights of the car ahead, it's too early; as soon as visibility improves, switch it off straight away. And slow down and leave more distance than usual.",
+    "moreTips": [
+      3,
+      5
+    ]
+  },
+  {
+    "n": 5,
+    "slug": "margen-de-velocidad-sobre-el-limite",
+    "title": "The instructor says “speed up”, the sign says 30: who do you listen to?",
+    "metaTitle": "Is there a legal margin above the speed limit? | ProntoTest",
+    "takeaway": "You can't go over the limit even by a couple of km/h, and that includes a learner car.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/margen-de-velocidad-sobre-el-limite/anim-ecb7d2597e29051d.svg",
+    "animationAlt": "Animation, top view: an orange learner car holds exactly 30 km/h on the speedometer while the car behind hoots at it to hurry",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/margen-de-velocidad-sobre-el-limite/cover-68e5948f926ab5d7.webp",
+    "coverCaption": "Top view: an orange learner car on a street with a 30 limit, a car hooting behind it and a speedometer reading 30",
+    "loop": 13.0,
+    "intro": "A street with one lane each way, a 30 km/h limit, and you're holding exactly 30. A queue has built up behind you and the instructor asks you to speed up: a couple of extra km/h seems like nothing.",
+    "notice": [
+      "The cars behind sit on your bumper and hoot, but you don't have to hurry: the learner plate gives nobody the right to rush you.",
+      "Someone will overtake where it's allowed: hold your lane and don't speed up along with them.",
+      "Other cars may be going faster, but that doesn't change your limit.",
+      "Nobody expects a learner car to accelerate hard, so other drivers may not react in time."
+    ],
+    "action": "Work out your speed from the sign and the type of street, not from the traffic around you. With no sign, the town limits are 20 km/h on a shared-surface street with no separate pavement, 30 km/h with one lane in your direction and 50 km/h with two or more; a bus lane doesn't count. A sign with a different number overrides the general rule. Nobody has a margin above the limit, a learner car included: an instructor who asks you to speed up is pushing you into an offence. In the exam, speeding counts as a fault: the bigger the excess, the more serious the fault, up to a fail. Calmly say that you're driving at the limit, keep slightly below it and glance at the speedometer when the road allows.",
+    "moreTips": [
+      4,
+      6
+    ]
+  },
+  {
+    "n": 6,
+    "slug": "parada-o-estacionamiento-bajarse-del-coche",
+    "title": "Stepped out of the car “for a minute”? For the law, that’s already parking",
+    "metaTitle": "Parada or estacionamiento: where the line is | ProntoTest",
+    "takeaway": "A stop means under two minutes with the driver at the wheel. Once you get out of the car, it's parking.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "30 October 2026",
+    "updatedIso": "2026-10-30",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/parada-o-estacionamiento-bajarse-del-coche/anim-f481f37ce8550c12.svg",
+    "animationAlt": "Animation, top view: an orange car stops double-parked at the kerb and a bus cannot get past; a no-parking sign and a legal parking area alongside",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/parada-o-estacionamiento-bajarse-del-coche/cover-81ef1bffce4b4ccb.webp",
+    "coverCaption": "Top view: an orange car pulling up next to a row of cars parked at the kerb, beside a no-parking sign",
+    "loop": 13.6,
+    "intro": "In town, you're dropping someone off at their door. There's no space at the kerb, so you stop double-parked with the hazards on: “I'll just be a minute”. Then you get out to help with their things and carry a box inside.",
+    "notice": [
+      "The driver you've blocked in won't wait: they'll try to get out on their own and may scrape your car.",
+      "A bus or a lorry won't squeeze past, and the whole lane comes to a halt.",
+      "What matters to a traffic officer is how long you've been standing there and whether you're at the wheel, not what you meant to do."
+    ],
+    "action": "Decide in advance whether you're getting out of the car or not. If you're only dropping a passenger off and you stay at the wheel, it's a stop: under two minutes, indicator towards the side you're pulling in to, and a place where you're in nobody's way. One step out of the car and you're parking, which means you can only stop where parking is allowed. Outside built-up areas, both stopping and parking happen off the carriageway, on the right, leaving the shoulder clear; on an autovía or autopista the shoulder isn't for stopping at all, only for emergencies. No space? It's easier to go round the block.",
+    "moreTips": [
+      5,
+      7
+    ]
+  },
+  {
+    "n": 7,
+    "slug": "stop-sin-visibilidad-parar-dos-veces",
+    "title": "A STOP sign and you can't see the road: why you stop twice",
+    "metaTitle": "A STOP sign and you can't see the road: why you stop twice | ProntoTest",
+    "takeaway": "At an R-2 “STOP” sign, stop first at the line and then again where you can see the road.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/stop-sin-visibilidad-parar-dos-veces/anim-522811ebf2e6ef26.svg",
+    "animationAlt": "Animation, top view: an orange car stops at the line by a STOP sign, creeps forward and stops a second time where the road is visible, as a motorbike appears from behind a van",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/stop-sin-visibilidad-parar-dos-veces/cover-b927f3aa4f4a0066.webp",
+    "coverCaption": "Top view: an orange car at the stop line by a STOP sign, the view to the left blocked by a van, a car coming along the main road",
+    "loop": 12.58,
+    "intro": "You're coming out of a side street onto a junction with an R-2 “STOP” sign. You stop at the line and can't see a thing: on the left a van is parked right up against the junction, on the right there's a solid fence, and you can see about three metres of road.",
+    "notice": [
+      "Drivers on the main road won't brake just because you can't see.",
+      "The car behind may hoot, but you still mustn't pull out blind.",
+      "A motorbike appears from behind the van later than a car would, and is going faster than it looks.",
+      "A car from the main road may turn into your street and cut the corner, right where your bonnet is."
+    ],
+    "action": "Make the first stop at the stop line; if there's no line, stop just before the road you're joining. If you can't see, don't pull out: creep forward until you can see the road and stop a second time there. That way drivers on the main road will spot you sooner too. Look left, right and left again, and check the pavement. Pull out only when nobody will have to brake hard because of you.",
+    "moreTips": [
+      6,
+      8
+    ]
+  },
+  {
+    "n": 8,
+    "slug": "semaforo-verde-no-significa-entrar",
+    "title": "Green, but you can't go: how not to get stuck in the middle of a junction",
+    "metaTitle": "Green, but you can't go: how not to get stuck in the middle of a junction | ProntoTest",
+    "takeaway": "Enter a junction only if there's somewhere to come out. On a green light you can stop and wait too.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/semaforo-verde-no-significa-entrar/anim-5469acacc13932f2.svg",
+    "animationAlt": "Animation, top view: on a green light the orange car waits before a yellow-hatched junction until there is room beyond it",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/semaforo-verde-no-significa-entrar/cover-e2c8b1cf571e7c4c.webp",
+    "coverCaption": "Top view: an orange car waiting on green before a yellow-hatched junction, with a queue of cars beyond it",
+    "loop": 13.28,
+    "intro": "Rush hour, and your light is green. But just beyond the junction there's a solid queue, with room for half a car. The drivers behind are already pushing you.",
+    "notice": [
+      "Horns behind you don't give you the right to go.",
+      "The queue may not move, and you'll be stuck in the middle of the junction.",
+      "The cross traffic will go on its own green, even if you're stuck in its way.",
+      "Pedestrians will cross on their signal and walk around your car in the road."
+    ],
+    "action": "Look not just at the lights but beyond the junction: your whole car must fit there with room to spare. If it won't fit, stop before the stop line and wait, even on green. When space opens up, drive through. If you do get stuck in the junction, don't wait for your own signal: clear it at the first chance you get, without getting in the way of those already moving. If a traffic officer is directing the traffic, follow their signals, not the lights.",
+    "moreTips": [
+      7,
+      9
+    ]
+  },
+  {
+    "n": 9,
+    "slug": "carril-de-aceleracion-decidir-al-principio",
+    "title": "Joining the motorway: why it's all decided at the start of the acceleration lane",
+    "metaTitle": "Joining the motorway: why it's all decided at the start of the acceleration lane | ProntoTest",
+    "takeaway": "Decide where to merge at the start of the acceleration lane. The joining driver gives way.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/carril-de-aceleracion-decidir-al-principio/anim-f5bde76aedc791d7.svg",
+    "animationAlt": "Animation, top view: right at the start of the acceleration lane the orange car picks the gap behind the nearest car and merges into the traffic",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/carril-de-aceleracion-decidir-al-principio/cover-9d3100f5570a83f0.webp",
+    "coverCaption": "Top view: an orange car at the start of the acceleration lane, with cars and a lorry on the motorway to its left",
+    "loop": 12.92,
+    "intro": "You're joining an autovía (a Spanish dual carriageway) from a local road. On your left the traffic is doing 120 km/h, and there's a lorry in the right-hand lane. The acceleration lane ends in a couple of hundred metres, and you're doing about 60 km/h.",
+    "notice": [
+      "The driver in the right-hand lane doesn't have to let you in, and may have nowhere to move over to on the left.",
+      "Someone in the left-hand lane may move right without checking the mirror, straight into the gap you picked.",
+      "The car behind you in the acceleration lane is speeding up and isn't expecting you to brake.",
+      "A lorry takes a long time to slow down and may not manage to make room for you."
+    ],
+    "action": "Check your left mirror while you're still on the slip road, before the lane begins. Pick a gap you can slot into at the speed of the traffic: usually the space right behind the nearest car. If there's a gap, put your left indicator on, accelerate to the traffic's speed and merge smoothly before the lane ends. If there isn't, deal with it at the start of the lane, while all of it is still ahead of you: ease off early and keep your distance. As a last resort, stop at the start of the lane with your hazards on and let the traffic pass. Don't stop at the end of the lane: nobody there expects a stopped car. If there's no acceleration lane at all, pull out only into a very big gap.",
+    "moreTips": [
+      8,
+      10
+    ]
+  },
+  {
+    "n": 10,
+    "slug": "aquaplaning-agua-en-la-rodada",
+    "title": "Steering suddenly gone light? That's how aquaplaning starts",
+    "metaTitle": "Aquaplaning: what to do when water lies in the ruts | ProntoTest",
+    "takeaway": "Slow down and open up the gap before you reach the water. On the water, don't brake and don't turn.",
+    "published": "6 September 2026",
+    "publishedIso": "2026-09-06",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/aquaplaning-agua-en-la-rodada/anim-720c944fbfeff0a9.svg",
+    "animationAlt": "Animation, top view: in heavy rain the orange car drives into water in the rut at 100 km/h and starts to slew sideways",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/aquaplaning-agua-en-la-rodada/cover-62eda9a10597325c.webp",
+    "coverCaption": "Top view: in heavy rain an orange car follows another towards water in the rut, with the speedometer at 100 km/h",
+    "loop": 10.02,
+    "intro": "It's pouring, and water is shining in the ruts ahead. The car in front throws up a cloud of spray, and you're following it at the same speed. You drive into the water and the steering suddenly goes light.",
+    "notice": [
+      "Smooth, shiny water in the ruts or a puddle across half the lane is where tyres lose grip: steer around it while you still can.",
+      "Lots of spray from the cars ahead means there's a lot of water, and it starts sooner than you can see.",
+      "If the steering goes light, the tyres sound different and the car responds late, you're already aquaplaning.",
+      "Braking or turning hard on the water only makes things worse: the car will pull to one side."
+    ],
+    "action": "Decide everything before the water: ease off smoothly, open up the gap and finish any lane change while the tyres still grip the tarmac. If you're already in it and the steering has gone light, hold the wheel straight and don't brake: come off the accelerator slowly and wait a couple of seconds. When the tyres bite again, correct your line with a small movement of the wheel, without jerking it. If the lane is flooded or there's too much water, don't go in: take the nearest exit or wait out the downpour off the road, and if you're forced to stop on the shoulder, switch on your hazards and put out the V-16 beacon.",
+    "moreTips": [
+      9,
+      11
+    ]
+  },
+  {
+    "n": 11,
+    "slug": "glorieta-preferencia-quien-circula-dentro",
+    "title": "A car on the roundabout is indicating right: can you enter?",
+    "metaTitle": "Entering a roundabout: trust the indicator? | ProntoTest",
+    "takeaway": "Only enter the roundabout after giving way to everyone already going round it. A right indicator on a car on the roundabout doesn't necessarily mean it will leave in front of you.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/glorieta-preferencia-quien-circula-dentro/anim-00ecebc015b614be.svg",
+    "animationAlt": "Animation, top view: an orange car enters the roundabout trusting the turquoise car's right indicator, but the turquoise car carries on round the ring and they meet at the entry; then the orange car waits at the line, lets the turquoise car pass and goes in after it",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/glorieta-preferencia-quien-circula-dentro/cover-6c1f3958c1ee1e41.webp",
+    "coverCaption": "Top view: an orange car at the entry to a roundabout, with “Roundabout” and “Give way” signs on the right, and a turquoise car going round the ring with its indicator on",
+    "loop": 13.81,
+    "intro": "You're approaching a roundabout, with signs R-402 “Roundabout” (Sentido obligatorio en glorieta) and R-1 “Give way” (Ceda el paso) at the entry. From the left, a car is coming round the ring towards your entry with its right indicator on: it looks as if it's about to leave right in front of you. Cars are already waiting behind you, and you're tempted to go straight away.",
+    "notice": [
+      "The driver may have forgotten to switch the indicator off after coming onto the roundabout, or changed their mind and is going on to the next exit.",
+      "A driver on the roundabout doesn't have to brake for you: they have right of way, even if they're still half a lap away from you."
+    ],
+    "action": "Approach the roundabout at a speed that lets you stop before the line. Look left: right of way belongs to everyone already going round the roundabout. Don't trust the indicator alone. Wait until the car actually starts to leave: its wheels have turned and it's heading for the exit. If in doubt, let it go by and enter after it. On the roundabout itself, signal your exit early with your right indicator and switch it off as soon as you've left: that makes it easier for drivers waiting at the entry to see where you're going. If there's a working traffic light or a traffic officer at the entry, follow their signals.",
+    "moreTips": [
+      10,
+      12
+    ]
+  },
+  {
+    "n": 12,
+    "slug": "estrechamiento-prioridad-sentido-contrario",
+    "title": "A narrow bridge not built for two: who goes first",
+    "metaTitle": "Narrow bridge: who goes first | ProntoTest",
+    "takeaway": "The sign tells you who goes first through a narrow section. Sign R-5 “Priority to oncoming traffic”: you give way to oncoming vehicles. Sign R-6 “Priority over oncoming traffic”: you go first, but if someone has already entered, let them come out.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/estrechamiento-prioridad-sentido-contrario/anim-6dcf21d18a638e60.svg",
+    "animationAlt": "Animation, top view: an orange car drives onto a narrow bridge at the same time as an oncoming van, and they end up nose to nose; then it stops before the narrow section by the sign, lets the van through and crosses the bridge after it",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/estrechamiento-prioridad-sentido-contrario/cover-87a2db2a31234e13.webp",
+    "coverCaption": "Top view: an orange car approaching a narrow bridge over a stream, with “Priority to oncoming traffic” and “Road narrows” signs on the right, and a white van driving onto the bridge from the other bank",
+    "loop": 14.04,
+    "intro": "A country road narrows before an old bridge: two cars can't pass each other on it. On your side there are signs P-17 “Road narrows” (Estrechamiento de calzada) and R-5 “Priority to oncoming traffic” (Prioridad del sentido contrario). From the other bank, a van is approaching the bridge, and it's about as far from the entry as you are.",
+    "notice": [
+      "The van has its own sign, R-6 “Priority over oncoming traffic” (Prioridad respecto al sentido contrario), and it isn't going to brake.",
+      "If you both drive on, one of you will have to reverse back along the bridge, and other cars have already pulled up behind.",
+      "The road before the bridge often has a bend: you only see the oncoming vehicle at the last moment."
+    ],
+    "action": "As you approach the bridge, check which sign is on your side. Sign R-5 “Priority to oncoming traffic” means you give way: stop before the narrow section without entering it, and let all oncoming traffic through, both those already on the bridge and those approaching it from the far end. If you've driven on anyway with someone coming the other way, you're the one who has to reverse. Sign R-6 “Priority over oncoming traffic” gives you right of way, but if an oncoming vehicle has already driven onto the bridge, let it come off. If there are no signs, whoever entered the narrow section first goes first. If it isn't clear who was first, the one who can manoeuvre more easily reverses: a car gives way to a lorry, a bus or a vehicle with a trailer, a motorbike gives way to a car, and of two vehicles of the same kind, the one closer to the end of the narrow section reverses.",
+    "moreTips": [
+      11,
+      13
+    ]
+  },
+  {
+    "n": 13,
+    "slug": "entrada-prohibida-navegador",
+    "title": "The satnav says “left”, but there's a “No entry” sign: which one to trust",
+    "metaTitle": "Satnav or “No entry” sign: which to follow | ProntoTest",
+    "takeaway": "Signs come before the satnav. If you see an R-101 “No entry” sign, don't turn, even if your route goes that way.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/entrada-prohibida-navegador/anim-c9e907932fab06d4.svg",
+    "animationAlt": "Animation, top view: following the satnav, an orange car turns left past a “No entry” sign and meets a car head-on as it pulls out from behind parked cars; then the orange car goes straight on through the junction and the satnav recalculates the route",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/entrada-prohibida-navegador/cover-69c480a32f5e35dc.webp",
+    "coverCaption": "Top view: an orange car at a junction, with the satnav route turning left into a street with a “No entry” sign and cars coming out of that street the other way",
+    "loop": 12.75,
+    "intro": "You're in an unfamiliar city, and the satnav tells you to turn left in 50 metres. There's an R-101 “No entry” (Entrada prohibida) sign on the corner, and cars on that street are coming towards you. The satnav keeps insisting, and the cars behind are right on your tail.",
+    "notice": [
+      "Satnav maps are updated late: the street's traffic layout may have been changed (new signs put up, the street made one-way or pedestrian-only), and the satnav doesn't know about it yet.",
+      "Drivers on that street aren't expecting an oncoming car, and they pull out from behind parked cars without looking your way.",
+      "Pedestrians on a one-way street look only in the direction the traffic comes from and may step out right in front of you."
+    ],
+    "action": "Go where the signs allow, straight on or into another turning; the satnav will recalculate the route by itself. The satnav isn't the law, and the rules require you to obey signs, even when they seem to contradict your route. The traffic officer comes first, then temporary signs and barriers (at roadworks, for example), then traffic lights, ordinary signs and road markings. The R-101 “No entry” sign closes the entry from your side to all vehicles, and turning in past it and then driving against the flow of traffic is a very serious offence: 500 euros and 6 points. If you miss the turn, don't reverse back across the junction: drive round the block. And don't reset the satnav by hand while you're driving: that's another 200 euros and 3 points.",
+    "moreTips": [
+      12,
+      14
+    ]
+  },
+  {
+    "n": 14,
+    "slug": "paso-a-nivel-no-detenerse-en-las-vias",
+    "title": "A level crossing without barriers and a jam beyond it: where to stop",
+    "metaTitle": "Level crossing without barriers, jam beyond it | ProntoTest",
+    "takeaway": "Only drive onto a level crossing if there's room for your whole car beyond it. You must not stop on the tracks, not even for a second.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": null,
+    "updatedIso": null,
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/paso-a-nivel-no-detenerse-en-las-vias/anim-88512e04a6aa11f8.svg",
+    "animationAlt": "Animation, top view: an orange car follows the queue onto the level crossing and stops on the rails, the traffic light starts flashing and a train approaches from the left; then it waits at the stop line, lets the train pass and crosses without stopping once there's room beyond the crossing",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/paso-a-nivel-no-detenerse-en-las-vias/cover-6f323b8dc4c0b006.webp",
+    "coverCaption": "Top view: an orange car approaching a level crossing without barriers, with signs and an unlit traffic light by the tracks, and a queue just beyond the tracks with no room for the car",
+    "loop": 14.22,
+    "intro": "A country road crosses a railway line. There are no barriers. Before the crossing there's a P-8 “Level crossing without barriers” (Paso a nivel sin barreras) sign, and right by the tracks a P-11 “Level crossing without barriers ahead” (Situación de un paso a nivel sin barreras) sign and a traffic light. When a train is coming, red lights flash on it; right now it's off. Just beyond the crossing there's a queue for the junction, and the space there is very tight.",
+    "notice": [
+      "A train can't brake quickly: from the moment the train driver sees you, it needs hundreds of metres to stop.",
+      "The queue beyond the crossing may not move, and you'll end up stopped right on the tracks.",
+      "The light starts flashing shortly before the train arrives, and with the windows closed you hear the train late.",
+      "The car behind may pull up tight against you, and you'll have nowhere to reverse off the tracks."
+    ],
+    "action": "Before the crossing, slow down, look both ways along the tracks and listen. Don't look at the rails, look beyond them: drive on only if your whole car will fit beyond the crossing with room to spare. If the light is flashing, the bell is ringing or the barrier is coming down, wait before the crossing, even if you can't see a train. Cross without stopping, and you mustn't overtake anyone before the crossing, not even a motorbike: since 1 October 2026 there are no exceptions any more. If your car stalls on the tracks, get everyone out at once and try to move it off the crossing; if you can't, get well away from the rails and warn that there's a car on the tracks: call 112.",
+    "moreTips": [
+      13,
+      15
+    ]
+  },
+  {
+    "n": 15,
+    "slug": "carril-bus-girar-a-la-derecha",
+    "title": "Can you move into the bus lane to turn right?",
+    "metaTitle": "Can you move into the bus lane to turn right? | ProntoTest",
+    "takeaway": "You can move into the bus lane to turn right, but only where the solid line has turned into a broken one, just before the junction. Let the bus go by, change lanes and make the turn from that lane.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/carril-bus-girar-a-la-derecha/anim-1bd6feb87e112ad3.svg",
+    "animationAlt": "Animation, top view: an orange car crosses the solid line and moves into the bus lane right in front of a bus, which brakes hard; then it keeps to its lane until the broken line, lets the bus go by, changes lanes and turns right from the bus lane",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/carril-bus-girar-a-la-derecha/cover-0d6acdb62df58e7f.webp",
+    "coverCaption": "Top view: an orange car in the left lane of a city street, with a bus lane and its sign on the right and a bus coming along it from behind; the route leads right into a side street",
+    "loop": 13.73,
+    "intro": "A city street with two lanes in your direction: you're in the left one, and the right one is for buses. It has BUS painted on it, and there's a sign on the pavement: S-51a “Lane reserved for specific vehicles” (Carril reservado para tipos específicos de vehículos). In a block you need to turn right. For now the bus lane is marked off by a solid line, and a bus is coming up along it behind you.",
+    "notice": [
+      "The bus in its own lane is moving faster than the traffic and isn't expecting you to pull in right in front of it.",
+      "Taxis, motorbikes or cyclists may be using the bus lane too; the symbols on the S-51a sign show who.",
+      "In many cities cameras on poles and on the buses themselves watch the bus lane.",
+      "There's sometimes a bus stop in the bus lane before the junction: the bus may be standing right where you wanted to turn."
+    ],
+    "action": "While the bus lane is marked off by a solid line, stay in your lane: you mustn't cross a solid line. Nearer the junction the line becomes a broken one, and from that point you may move into the bus lane. Check your right mirror and over your shoulder, put your right indicator on and, if a bus is close behind, let it go by: in this lane the right of way belongs to those it's meant for. Then move over and make your turn from that lane. Don't turn right straight from your own lane across the bus lane: that way you cut in front of whoever is going straight on in it, whether a bus, a taxi or a cyclist. On the broken-line stretch you may enter the lane to turn or to pull into a driveway, but not to stop, make a U-turn or overtake. The symbols on the S-51a “Lane reserved for specific vehicles” sign show who else may use the lane. If there's a plate under the sign showing hours, the restriction only applies during those hours. Driving in the bus lane where you're not allowed to costs 200 euros.",
+    "moreTips": [
+      14,
+      16
+    ]
+  },
+  {
+    "n": 16,
+    "slug": "ambulancia-detras-semaforo-en-rojo",
+    "title": "Ambulance behind, red light ahead: how to make way without breaking any rules",
+    "metaTitle": "Ambulance behind, red light ahead | ProntoTest",
+    "takeaway": "Make way for the ambulance by moving to the right or staying where you are. Don't go through the red light for it: the ambulance driver will choose their own way through.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/ambulancia-detras-semaforo-en-rojo/anim-a184e968510fc546.svg",
+    "animationAlt": "Animation, top view: an orange car goes through the red light to clear the way for an ambulance and nearly hits a car in the cross traffic; then it stays at the stop line, the turquoise car moves to the right, and the ambulance carefully passes between the lanes",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/ambulancia-detras-semaforo-en-rojo/cover-8b38971928b0f0c7.webp",
+    "coverCaption": "Top view: a junction with traffic lights; an orange car waits first at the red light in the left lane, a turquoise car is on its right, and an ambulance with flashing lights is coming up behind",
+    "loop": 12.7,
+    "intro": "You're stopped first at a red light in the left lane. An ambulance appears behind you with its lights flashing and siren on; it needs to get through the junction. It feels as if you have to clear the way right now, and the only free space is ahead of you, in the junction.",
+    "notice": [
+      "The cross traffic is moving on its own green and can't hear the siren behind closed windows.",
+      "The ambulance may not go where you think: between the lanes, further to the right or into the oncoming lane.",
+      "The lane next to you will start moving over too, so check there's room before you move."
+    ],
+    "action": "Clear a way for the ambulance by moving to the right. If there's nowhere to go, stay where you are: the ambulance driver can see the queue and will choose their own way through. Move smoothly, with no sudden braking or unexpected manoeuvres, and use your indicator to show which way you're moving. Don't go through the red light for the ambulance: the rules make no such exception, running a red light costs 200 euros and 4 points, and in the junction you could cause a crash yourself. Crossing the junction with particular care is the ambulance driver's duty. On autovías and autopistas, from 1 October 2026, when traffic is jammed you must leave a corridor for the emergency services in advance: with two lanes, down the middle; with three or more, between the left lane and the one next to it.",
+    "moreTips": [
+      15,
+      17
+    ]
+  },
+  {
+    "n": 17,
+    "slug": "zona-coexistencia-peaton-prioridad",
+    "title": "A street with no pavement: why the pedestrian outranks the car here",
+    "metaTitle": "Shared zone: the pedestrian comes first | ProntoTest",
+    "takeaway": "Where the pavement and the road are at the same level, the limit is 20 km/h and pedestrians have right of way anywhere on the street. The S-47 “Shared zone” (Zona de coexistencia) sign means the same.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/zona-coexistencia-peaton-prioridad/anim-fa2492417c747193.svg",
+    "animationAlt": "Animation, top view: an orange car drives into a street with no kerbs at 40 km/h, catches up with a couple with a pushchair, and a child runs out after a ball that has rolled away; then it drives at walking pace, stops before the ball, waits for the couple to step aside and parks in a marked space",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/zona-coexistencia-peaton-prioridad/cover-cbde44d6fc29e560.webp",
+    "coverCaption": "Top view: an orange car drives into an old-town street with no kerbs and a “Shared zone” sign, a couple with a pushchair walk down the middle and children play by a door",
+    "loop": 14.98,
+    "intro": "You turn into a street in the old town: there's no kerb, the road and the pavement are laid with the same paving at the same level, and at the entrance there's an S-47 “Shared zone” (Zona de coexistencia) sign. A couple with a pushchair are walking slowly down the middle of the street, and children are playing by a doorway. From here it's the shortest way to where you're going to park.",
+    "notice": [
+      "Pedestrians here walk wherever it suits them and don't have to look round at the sound of an engine.",
+      "Children run out of a doorway or from behind a car at any moment.",
+      "Cyclists and e-scooters may ride along a street like this in both directions, even if cars may only go one way.",
+      "Cars left outside the marked spaces narrow the way through, and it's hard to pass an oncoming car."
+    ],
+    "action": "A street like this is easy to recognise: no kerb, the pavement and the road at the same level with the same paving throughout, or an S-47 “Shared zone” sign at the entrance. Keep to 20 km/h at most, and to walking pace when you're near people. Pedestrians may walk across the whole width of the street, and they have right of way anywhere on it: don't sound your horn and don't squeeze past, wait for them to clear the way. You may only park where a sign or road markings allow it. The S-28 “Home and play zone” (Zona de estancia y juego) sign is stricter: there the limit is always 10 km/h, and children are allowed to play right on the road. These signs and rules were updated in 2025–2026, and here pedestrians don't have to step aside for cars.",
+    "moreTips": [
+      16,
+      18
+    ]
+  },
+  {
+    "n": 18,
+    "slug": "zona-escolar-ninos-entre-coches",
+    "title": "The “Children” sign near a school: which car a child will run out from behind",
+    "metaTitle": "“Children” sign at a school: how to drive past | ProntoTest",
+    "takeaway": "When you see the P-21a “Children” (Niños) sign, slow down early and keep further away from stationary cars: behind any of them there may be a child who will run out into the road at the last moment.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": null,
+    "updatedIso": null,
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/zona-escolar-ninos-entre-coches/anim-824bdd91b1c6ff3e.svg",
+    "animationAlt": "Animation, top view: an orange car drives right up close to the cars standing outside the school, and a child runs out from behind a van after a ball; then it slows down early, keeps further left and calmly stops to let the child pass",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/zona-escolar-ninos-entre-coches/cover-0aad50eecf74c469.webp",
+    "coverCaption": "Top view: a street by a school with “Children” signs and a 30 limit, cars standing along the pavement, one with its door open, and an orange car driving right up close to them",
+    "loop": 12.65,
+    "intro": "It's morning and you're driving past a school; the R-301 “Maximum speed” (Velocidad máxima) sign says 30 km/h. There's an unbroken line of cars along the pavement, and one has its rear door open. On the pavement there are children with backpacks, and someone is running after a ball.",
+    "notice": [
+      "A child is lower than a bonnet: behind a parked van you can't see them until they're in the road.",
+      "Children who are running late dash across anywhere, not at the crossing.",
+      "A parent may open the car door on the road side to drop a child off.",
+      "The car in front may suddenly stop right in the lane to drop a child off."
+    ],
+    "action": "Slow down before you even reach the sign and keep your foot over the brake: near schools and wherever children can be expected, the rules require you to drive at a moderate speed and be ready to stop, even if the sign allows more. Move away from the stationary cars as far as the oncoming lane allows, and look under the cars and between them: you'll see feet and a ball before you see the child. Don't go round a car that has stopped before a crossing: overtaking at a pedestrian crossing is prohibited, and there may be a child walking on the other side of it. Go especially slowly past a stationary school bus. Drop your own children off only where stopping is allowed, and on the pavement side.",
+    "moreTips": [
+      17,
+      19
+    ]
+  },
+  {
+    "n": 19,
+    "slug": "giro-derecha-peatones-cruzando-en-verde",
+    "title": "You're turning on green and there are pedestrians: who goes first",
+    "metaTitle": "Turning on green with pedestrians crossing | ProntoTest",
+    "takeaway": "When you turn, you give way to pedestrians crossing the street you're turning into, even if your light is green.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/giro-derecha-peatones-cruzando-en-verde/anim-6223a7adfa1a4830.svg",
+    "animationAlt": "Animation, top view: an orange car turns right on green without slowing down and passes right next to a pedestrian on the zebra crossing; then it stops before the crossing, lets the pedestrians and a cyclist through, and only then drives off",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/giro-derecha-peatones-cruzando-en-verde/cover-63e6a5c1385e3d06.webp",
+    "coverCaption": "Top view: a junction with traffic lights, an orange car turning right on green, and pedestrians on the crossing across the street it's turning into",
+    "loop": 13.47,
+    "intro": "A junction with traffic lights: your light is green and you're turning right. On the pedestrian crossing across the street you're turning into, the pedestrians have a green light too, and they're already walking. Behind you, drivers are waiting for you to clear the lane.",
+    "notice": [
+      "Pedestrians cross on their own signal and watch the lights, not the turning cars.",
+      "Someone on a scooter or a bike gets across faster than a pedestrian and appears out of nowhere.",
+      "The car behind may start to go round you if you stop suddenly halfway through the turn."
+    ],
+    "action": "Before the turn, slow down and look at the crossing on the street you're turning into, not just at your own light. Green lets you go, but you give way to anyone already on the crossing, even where there's no crossing and someone is simply walking across the street. Stop before the crossing, not on it, and wait until the pedestrians have crossed your half of the road. As you pull away, look right again: a cyclist or a scooter may be coming up to the crossing. Failing to give way to a pedestrian costs 200 euros and 4 points.",
+    "moreTips": [
+      18,
+      20
+    ]
+  },
+  {
+    "n": 20,
+    "slug": "carril-bici-girar-a-la-derecha",
+    "title": "You're turning right and there's a cyclist on your right: who gives way to whom",
+    "metaTitle": "Turning right with a cyclist alongside | ProntoTest",
+    "takeaway": "When you turn right across a cycle lane, give way to cyclists riding straight on along it. Just before the turn, check your right mirror and blind spot.",
+    "published": "30 October 2026",
+    "publishedIso": "2026-10-30",
+    "updated": "4 November 2026",
+    "updatedIso": "2026-11-04",
+    "animation": "https://storage.prontotest.net/my-bucket/prontotest/guia/carril-bici-girar-a-la-derecha/anim-5bb9be9c37d80320.svg",
+    "animationAlt": "Animation, top view: an orange car overtakes a cyclist and immediately turns right across the cycle lane just in front of them; then it puts its indicator on early, lets the cyclist ride past the turning and turns after them",
+    "cover": "https://storage.prontotest.net/my-bucket/prontotest/guia/carril-bici-girar-a-la-derecha/cover-15d2046d6fe72d9b.webp",
+    "coverCaption": "Top view: a street with a cycle lane on the right and a “Cycle crossing” sign, an orange car about to turn right, and a cyclist coming up behind it in the cycle lane",
+    "loop": 12.96,
+    "intro": "A city street, with a cycle lane running along the pavement on the right, and before the junction there's a P-22a “Cycle crossing” (Paso para ciclistas) sign. You need to turn right, into the next street. There are no cyclists ahead of you, but about twenty metres back you overtook one.",
+    "notice": [
+      "The cyclist is doing 20–25 km/h and catches up with you while you slow down for the turn.",
+      "In your right blind spot the cyclist doesn't show in the mirror: you'll only spot them if you look over your shoulder.",
+      "An e-scooter in the cycle lane is quiet and fast, and at the lights cyclists may pass the queue of cars on the right as well.",
+      "The cyclist knows they have right of way and doesn't expect you to turn in front of them."
+    ],
+    "action": "Put your right indicator on early so the cyclist understands what you're doing, and check your right mirror. Just before the turn, look over your right shoulder: a cyclist beside you may not show in the mirror. If someone is riding alongside you in the cycle lane or catching up with you, let them go by and only then turn: in the cycle lane and on a cycle crossing, the cyclist has right of way over a turning car. Don't overtake a cyclist just before the turn only to cut straight in front of them. Failing to give way to a cyclist costs 200 euros and 4 points. And if they're riding ahead of you in your lane, stay at least 5 metres back: it's a new rule in towns and cities from 1 October 2026.",
+    "moreTips": [
+      19,
+      18
+    ]
+  }
+]

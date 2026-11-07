@@ -1,18 +1,65 @@
 # -*- coding: utf-8 -*-
-"""Собирает статические страницы ProntoTest · Guide из общих частей."""
-import os, pathlib
+"""Собирает раздел ProntoTest · Guide: хаб и 20 страниц статей.
+
+Разметка и значения — из макета Pronto.pen, тексты — из ProntoTest-Guia-spec.md
+(data/guide.json). Тексты переносятся дословно, без редактуры.
+"""
+import html
+import json
+import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SPRITE = (ROOT / "assets" / "icons.svg").read_text(encoding="utf-8").strip()
+ARTICLES = json.loads((ROOT / "data" / "guide.json").read_text(encoding="utf-8"))
 
+CANON = "https://prontotest.net"
+PER_PAGE = 9
 
-def icon(name, cls="icon"):
-    return f'<svg class="{cls}" aria-hidden="true"><use href="#i-{name}"></use></svg>'
+# ---------------------------------------------------------------- категории ---
+# В контент-спеке категорий нет, в макете они есть у десяти статей — здесь
+# сохранены макетные и по той же логике проставлены остальные.
+CATEGORY = {
+    "averia-en-autovia-baliza-v16": "road-safety",
+    "glorieta-dos-carriles-salida": "right-of-way",
+    "adelantar-ciclista-prohibido-adelantar": "manoeuvres",
+    "luces-antiniebla-cuando-encender": "lights",
+    "margen-de-velocidad-sobre-el-limite": "speed",
+    "parada-o-estacionamiento-bajarse-del-coche": "traffic-rules",
+    "stop-sin-visibilidad-parar-dos-veces": "traffic-signs",
+    "semaforo-verde-no-significa-entrar": "right-of-way",
+    "carril-de-aceleracion-decidir-al-principio": "manoeuvres",
+    "aquaplaning-agua-en-la-rodada": "road-safety",
+    "glorieta-preferencia-quien-circula-dentro": "right-of-way",
+    "estrechamiento-prioridad-sentido-contrario": "right-of-way",
+    "entrada-prohibida-navegador": "traffic-signs",
+    "paso-a-nivel-no-detenerse-en-las-vias": "road-safety",
+    "carril-bus-girar-a-la-derecha": "traffic-rules",
+    "ambulancia-detras-semaforo-en-rojo": "right-of-way",
+    "zona-coexistencia-peaton-prioridad": "right-of-way",
+    "zona-escolar-ninos-entre-coches": "road-safety",
+    "giro-derecha-peatones-cruzando-en-verde": "right-of-way",
+    "carril-bici-girar-a-la-derecha": "right-of-way",
+}
 
+CATEGORIES = [
+    ("traffic-rules", "Traffic rules", "book-cover"),
+    ("traffic-signs", "Traffic signs", "warning-diamond"),
+    ("right-of-way", "Right of way", "traffic"),
+    ("speed", "Speed", "speedometer"),
+    ("manoeuvres", "Manoeuvres", "arrow-right"),
+    ("lights", "Lights", "energy"),
+    ("road-safety", "Road safety & accidents", "warning"),
+    ("documents", "Documents", "book-cover"),
+]
+CAT_LABEL = {k: (label, icon) for k, label, icon in CATEGORIES}
+
+CHIPS = [("all", "All")] + [(k, "Road safety" if k == "road-safety" else label)
+                            for k, label, _ in CATEGORIES]
 
 NAV = [
     ("Free DGT test", "#", False),
-    ("Guide", "index.html", True),
+    ("Guide", "{base}index.html", True),
     ("Benefits", "#", False),
     ("For whom", "#", False),
     ("Reviews", "#", False),
@@ -21,44 +68,113 @@ NAV = [
     ("Team", "#", False),
 ]
 
+FOOTER_COLS = [
+    ("Product", ["Free DGT test", "Complete category B mock exam", "Traffic rules",
+                 "Right of way", "Speed", "Download app"]),
+    ("ProntoTest", ["Home", "Guide", "Team", "Support"]),
+    ("Social", ["YouTube", "X", "LinkedIn", "Instagram"]),
+    ("Legal", ["Privacy Policy", "Terms of Service", "Cookie settings"]),
+]
 
-def head(title, description, css_extra=""):
+DISCLAIMER = ("ProntoTest is an independent study service and is not affiliated with the DGT. "
+              "Question bank reviewed by hand · July 2026 · Juan Manuel Llergo, driving "
+              "instructor. Passing our mock exams does not guarantee passing the official test.")
+
+HUB_TITLE = "Useful tips from ProntoTest"
+HUB_DESC = ("Real road situations in Spain explained step by step: what to look for, "
+            "what to do and why, with official sources.")
+HUB_META_TITLE = "Useful driving tips for Spain | ProntoTest"
+HUB_META_DESC = ("Practical ProntoTest tips for real situations at the wheel: roundabouts, "
+                 "cyclists, lights, breakdowns and more, with official DGT and BOE sources.")
+
+CTA_EYEBROW = "Free DGT test"
+CTA_TITLE = "Read the tips, then check yourself in the free category B mock exam"
+CTA_BUTTON = "Practise with free tests"
+CTA_ARTICLE_BUTTON = "Keep practising with free tests"
+
+
+# ------------------------------------------------------------------ helpers ---
+
+def e(s):
+    return html.escape(s, quote=True)
+
+
+def icon(name, cls="icon"):
+    return f'<svg class="{cls}" aria-hidden="true"><use href="#i-{name}"></use></svg>'
+
+
+def eyebrow(icon_name, label, cls=""):
+    c = f" {cls}" if cls else ""
+    return (f'<span class="eyebrow{c}"><span class="eyebrow__tile">{icon(icon_name)}</span>'
+            f'<span class="eyebrow__label">{e(label)}</span></span>')
+
+
+SENT_SPLIT = re.compile(r'(?<=[.!?])\s+(?=[“"(A-Z0-9])')
+
+
+def to_steps(paragraph):
+    """Делит «What to do» на шаги по границам предложений, не меняя текст."""
+    guarded = re.sub(r"(\d)\.(\d)", lambda m: m.group(1) + "\x00" + m.group(2), paragraph)
+    parts = [p.replace("\x00", ".").strip() for p in SENT_SPLIT.split(guarded)]
+    return [p for p in parts if p]
+
+
+def fmt_dates(a):
+    out = f'<time datetime="{a["publishedIso"]}">{e(a["published"])}</time>'
+    if a["updated"]:
+        out += f' · Updated <time datetime="{a["updatedIso"]}">{e(a["updated"])}</time>'
+    return out
+
+
+def article_href(slug, base):
+    return f"{base}guia/{slug}.html"
+
+
+# ------------------------------------------------------------------ partials ---
+
+def head(*, title, description, canonical, base, extra=""):
+    nois = '<meta name="robots" content="noindex,follow">'
     return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
-<meta name="description" content="{description}">
+<title>{e(title)}</title>
+<meta name="description" content="{e(description)}">
+{nois}
+<link rel="canonical" href="{canonical}">
+<link rel="alternate" hreflang="es" href="{canonical.replace('/en/', '/')}">
+<link rel="alternate" hreflang="en" href="{canonical}">
+<link rel="alternate" hreflang="ru" href="{canonical.replace('/en/', '/ru/')}">
+<link rel="alternate" hreflang="x-default" href="{canonical.replace('/en/', '/')}">
 <meta name="theme-color" content="#F1F5F9">
-<link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/mplusu-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/styles.css">{css_extra}
-</head>
+<link rel="preload" href="{base}assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{base}assets/fonts/mplusu-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{base}assets/css/styles.css">
+<link rel="preconnect" href="https://storage.prontotest.net" crossorigin>
+{extra}</head>
 <body>
 {SPRITE}
 """
 
 
-def header():
+def header(base):
     links = "\n".join(
         '        <a class="nav__link{cls}" href="{href}"{cur}>{label}</a>'.format(
             cls=" is-active" if active else "",
-            href=href,
+            href=href.format(base=base),
             cur=' aria-current="page"' if active else "",
-            label=label,
-        )
-        for label, href, active in NAV
-    )
+            label=e(label))
+        for label, href, active in NAV)
     return f"""  <header class="header" data-header>
     <div class="header__inner">
-      <a class="logo" href="index.html">PRONTOTEST</a>
+      <a class="logo" href="{base}index.html">PRONTOTEST</a>
       <div class="header__right">
         <nav class="nav" aria-label="Main">
 {links}
         </nav>
         <div class="header__buttons">
-          <button class="btn-glass btn-glass--icon" type="button" aria-label="Change language">{icon("globe")}</button>
+          <button class="btn-glass btn-glass--icon" type="button" aria-label="Change language" data-ua="globe">{icon("globe")}</button>
           <a class="btn-glass" href="#">Get app</a>
         </div>
       </div>
@@ -67,10 +183,10 @@ def header():
 
   <header class="header-m" data-header>
     <div class="header-m__inner">
-      <a class="logo" href="index.html">PRONTOTEST</a>
+      <a class="logo" href="{base}index.html">PRONTOTEST</a>
       <div class="header-m__icons">
         <button class="icon-round" type="button" aria-label="Search">{icon("search")}</button>
-        <button class="icon-round" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu" data-menu-open>{icon("menu")}</button>
+        <button class="icon-round" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu" data-menu-toggle data-ua="menu-v4"><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
       </div>
     </div>
   </header>
@@ -79,36 +195,25 @@ def header():
 
 GLOW = """    <div class="glow" aria-hidden="true">
       <div class="glow__stage">
-      <span class="glow__blob glow__b1"></span>
-      <span class="glow__blob glow__b2"></span>
-      <span class="glow__blob glow__b3"></span>
-      <span class="glow__blob glow__b4"></span>
-      <span class="glow__blob glow__b5"></span>
-      <span class="glow__blob glow__b6"></span>
-      <span class="glow__blob glow__b7"></span>
-      <span class="glow__blob glow__b8"></span>
+        <span class="glow__blob glow__b1"></span>
+        <span class="glow__blob glow__b2"></span>
+        <span class="glow__blob glow__b3"></span>
+        <span class="glow__blob glow__b4"></span>
+        <span class="glow__blob glow__b5"></span>
+        <span class="glow__blob glow__b6"></span>
+        <span class="glow__blob glow__b7"></span>
+        <span class="glow__blob glow__b8"></span>
       </div>
       <span class="glow__fade"></span>
     </div>
 """
 
-FOOTER_COLS = [
-    ("Product", ["Free DGT test", "Category B mock exam", "Traffic rules", "Right of way", "Speed", "Download app"]),
-    ("ProntoTest", ["Home", "Guide", "Team", "Support"]),
-    ("Social", ["YouTube", "X", "LinkedIn", "Instagram"]),
-    ("Legal", ["Privacy Policy", "Terms of Service", "Cookie settings"]),
-]
 
-DISCLAIMER = ("ProntoTest is an independent study service and is not affiliated with the DGT. "
-              "Questions are reviewed by hand against the official question bank · July 2026 · "
-              "Juan Martínez, driving instructor. Passing our mock exams does not guarantee "
-              "passing the official test.")
-
-
-def footer():
+def footer(base):
     cols = []
     for title, items in FOOTER_COLS:
-        lis = "\n".join(f'            <li><a class="footer__link" href="#">{i}</a></li>' for i in items)
+        lis = "\n".join(f'            <li><a class="footer__link" href="#">{e(i)}</a></li>'
+                        for i in items)
         cols.append(f"""        <div class="footer__col">
           <h2 class="footer__col-title">{title.upper()}</h2>
           <ul>
@@ -123,10 +228,10 @@ def footer():
 {cols}
         </div>
         <div class="footer__right">
-          <button class="lang" type="button">{icon("globe")}<span>EN</span></button>
+          <button class="lang" type="button" data-ua="globe">{icon("globe")}<span>EN</span></button>
           <div class="badges">
-            <a href="#"><img src="assets/images/badges/appstore.png" alt="Download on the App Store" width="149" height="44" loading="lazy"></a>
-            <a href="#"><img src="assets/images/badges/googleplay.png" alt="Get it on Google Play" width="149" height="44" loading="lazy"></a>
+            <a href="#"><img src="{base}assets/images/badges/appstore.png" alt="Download on the App Store" width="149" height="44" loading="lazy"></a>
+            <a href="#"><img src="{base}assets/images/badges/googleplay.png" alt="Get it on Google Play" width="149" height="44" loading="lazy"></a>
           </div>
         </div>
       </div>
@@ -140,29 +245,20 @@ def footer():
 
       <div class="footer__legal">
         <p class="footer__copy">2026 © ProntoTest. All rights reserved</p>
-        <p class="footer__disclaimer">{DISCLAIMER}</p>
+        <p class="footer__disclaimer">{e(DISCLAIMER)}</p>
       </div>
     </div>
   </footer>
 """
 
 
-def menu():
+def menu(base):
     items = "\n".join(
-        f'        <a class="menu__item{" is-active" if active else ""}" href="{href}" style="--i:{n}">'
-        f'<span>{label}</span>{icon("chevron-right")}</a>'
-        for n, (label, href, active) in enumerate(NAV)
-    )
+        '        <a class="menu__item{cls}" href="{href}" style="--i:{n}"><span>{label}</span>{chev}</a>'.format(
+            cls=" is-active" if active else "", href=href.format(base=base),
+            n=n, label=e(label), chev=icon("chevron-right"))
+        for n, (label, href, active) in enumerate(NAV))
     return f"""  <div class="menu" id="menu" hidden>
-    <div class="menu__header">
-      <a class="logo" href="index.html">PRONTOTEST</a>
-      <div class="header-m__icons">
-        <button class="icon-round" type="button" aria-label="Search">{icon("search")}</button>
-        <button class="icon-round" type="button" aria-label="Close menu" data-menu-close>
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
-      </div>
-    </div>
     <nav class="menu__nav" aria-label="Mobile">
 {items}
     </nav>
@@ -170,150 +266,196 @@ def menu():
       <a class="menu__cta" href="#">Get the app</a>
       <div class="menu__utility">
         <div class="badges">
-          <a href="#"><img src="assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" loading="lazy"></a>
-          <a href="#"><img src="assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" loading="lazy"></a>
+          <a href="#"><img src="{base}assets/images/badges/appstore.png" alt="Download on the App Store" width="108" height="32" loading="lazy"></a>
+          <a href="#"><img src="{base}assets/images/badges/googleplay.png" alt="Get it on Google Play" width="108" height="32" loading="lazy"></a>
         </div>
-        <button class="lang" type="button">{icon("globe")}<span>EN</span></button>
+        <button class="lang" type="button" data-ua="globe">{icon("globe")}<span>EN</span></button>
       </div>
     </div>
   </div>
 """
 
 
-TAIL = """  <script src="assets/js/app.js" defer></script>
+def tail(base, script="app.js"):
+    return f"""  <script src="{base}assets/js/{script}" defer></script>
 </body>
 </html>
 """
 
-IMG = "assets/images/pronto/"
 
-# ---------------------------------------------------------------- listing ---
+def promo(base, button_label):
+    return f"""      <div class="promo">
+        <div class="promo__top">
+          {eyebrow("checkmark-in-circle", CTA_EYEBROW)}
+          <p class="promo__title">{e(CTA_TITLE)}</p>
+        </div>
+        <a class="btn-pill" href="#">{e(button_label)}</a>
+      </div>"""
 
-CHIPS = ["All", "Traffic rules", "Traffic signs", "Right of way", "Speed",
-         "Manoeuvres", "Lights", "Road safety", "Documents"]
 
-TILES = [
-    dict(kind="image", size="large", slug="glorieta-dos-carriles-salida",
-         icon="traffic", cat="Right of way",
-         title="Why you leave a roundabout only from the right-hand lane",
-         display=False, date="2026-10-28", date_label="28 October 2026",
-         alt="Top view of a two-lane roundabout with a car taking the exit from the right-hand lane"),
-    dict(kind="image", size="large", slug="adelantar-ciclista-prohibido-adelantar",
-         icon="arrow-right", cat="Manoeuvres",
-         title="A solid line and a cyclist ahead: overtake or wait?",
-         display=True, date="2026-09-23", date_label="23 September 2026",
-         alt="A car behind a cyclist on a road with a solid centre line"),
-    dict(kind="solid", tone="soft", size="small", icon="book-cover", cat="Traffic rules",
-         title="Stepped out of the car “for a minute”? For the law, that’s already parking",
-         display=False, date="2026-10-21", date_label="21 October 2026"),
-    dict(kind="image", size="small", dark=True, slug="stop-sin-visibilidad-parar-dos-veces",
-         icon="warning-diamond", cat="Traffic signs",
-         title="A STOP sign and you can't see the road: why you stop twice",
-         display=False, date="2026-10-14", date_label="14 October 2026",
-         alt="A junction with a STOP sign where buildings block the view of the main road"),
-    dict(kind="image", size="small", slug="luces-antiniebla-cuando-encender",
-         icon="energy", cat="Lights",
-         title="Fog lights in a downpour: when the rear one helps and when it dazzles",
-         display=False, date="2026-10-07", date_label="7 October 2026",
-         alt="Cars in heavy rain with rear fog lights on"),
-    dict(kind="feature", slug="averia-en-autovia-baliza-v16",
-         icon="warning", cat="Road safety & accidents",
-         title="Broken down on the motorway: beacon on the roof, everyone behind the barrier",
-         date="2026-11-04", date_label="4 November 2026",
-         alt="An orange car on the hard shoulder of a motorway with a V-16 beacon on its roof"),
-    dict(kind="solid", tone="primary", size="small", icon="traffic", cat="Right of way",
-         title="Green, but you can't go: how not to get stuck in the middle of a junction",
-         display=True, date="2026-09-30", date_label="30 September 2026"),
-    dict(kind="image", size="small", slug="carril-de-aceleracion-decidir-al-principio",
-         icon="arrow-right", cat="Manoeuvres",
-         title="Joining the motorway: why it's all decided at the start of the acceleration lane",
-         display=False, date="2026-09-16", date_label="16 September 2026",
-         alt="A car accelerating along a slip road to merge onto a motorway"),
-    dict(kind="solid", tone="sun", size="small", icon="speedometer", cat="Speed",
-         title="The instructor says “speed up”, the sign says 30: who do you listen to?",
-         display=False, date="2026-09-09", date_label="9 September 2026"),
-    dict(kind="image", size="large", slug="aquaplaning-agua-en-la-rodada",
-         icon="warning", cat="Road safety & accidents",
-         title="Steering suddenly gone light? That's how aquaplaning starts",
-         display=True, date="2026-09-02", date_label="2 September 2026",
-         alt="A car driving through standing water in the wheel ruts of a wet road"),
-    dict(kind="cta"),
+# ----------------------------------------------------------------- шаблоны ----
+# Раскладка bento из макета: ряд из двух больших, ряд из трёх малых,
+# фича во всю ширину, ещё ряд из трёх малых. Один цикл — девять карточек.
+ROWS = [
+    [("large", "img", "", False), ("large", "img", "", True)],
+    [("small", "solid", "soft", False), ("small", "img", "ink", False),
+     ("small", "img", "", False)],
+    [("full", "feature", "", True)],
+    [("small", "solid", "primary", True), ("small", "img", "", False),
+     ("small", "solid", "sun", False)],
 ]
 
 
-def eyebrow(name, label):
-    return (f'<div class="eyebrow"><span class="eyebrow__tile">{icon(name)}</span>'
-            f'<span class="eyebrow__label">{label}</span></div>')
+def tile_classes(i):
+    """Классы плитки по её позиции среди видимых карточек."""
+    flat = [c for row in ROWS for c in row]
+    size, kind, tone, display = flat[i % len(flat)]
+    cls = ["tile", f"tile--{size}", f"tile--{kind}"]
+    if tone:
+        cls.append(f"tile--{tone}")
+    if display:
+        cls.append("tile--display")
+    return " ".join(cls)
 
 
-def render_tile(t, i):
-    delay = f"--delay:{min(i * 60, 300)}ms"
-    if t["kind"] == "cta":
-        return f"""        <div class="tile tile--large tile--cta reveal" style="{delay}">
-          <div class="tile__top">
-            {eyebrow("checkmark-in-circle", "Free DGT test")}
-            <h3 class="tile__title">Read the tips, then check yourself in the free category B mock exam</h3>
-          </div>
-          <a class="btn-pill" href="#">Practise with free tests</a>
-        </div>"""
-
-    if t["kind"] == "feature":
-        return f"""        <a class="tile tile--full tile--feature reveal" href="article.html" style="{delay}">
-          <span class="tile__media"><img src="{IMG}{t['slug']}.webp" alt="{t['alt']}" width="1200" height="600" loading="lazy"></span>
+def render_card(a, base, pos, hidden):
+    cat = CATEGORY[a["slug"]]
+    label, ic = CAT_LABEL[cat]
+    hid = " hidden" if hidden else ""
+    return f"""        <a class="{tile_classes(pos)}" href="{article_href(a['slug'], base)}" data-card data-category="{cat}"{hid}>
+          <span class="tile__media"><img src="{a['cover']}" alt="" width="1200" height="675" loading="lazy" decoding="async"></span>
           <span class="tile__scrim"></span>
-          {eyebrow(t["icon"], t["cat"])}
-          <h3 class="tile__title">{t['title']}</h3>
-          <time class="tile__date" datetime="{t['date']}">{t['date_label']}</time>
+          <span class="tile__body">
+            <span class="tile__top">
+              {eyebrow(ic, label)}
+              <span class="tile__title">{e(a['title'])}</span>
+            </span>
+            <time class="tile__date" datetime="{a['publishedIso']}">{e(a['published'])}</time>
+          </span>
         </a>"""
 
-    size = "tile--large" if t["size"] == "large" else "tile--small"
-    title_cls = "tile__title tile__title--display" if t.get("display") else "tile__title"
 
-    if t["kind"] == "solid":
-        tone = {"soft": "tile--soft", "primary": "tile--primary", "sun": "tile--sun"}[t["tone"]]
-        return f"""        <a class="tile {size} tile--solid {tone} reveal" href="article.html" style="{delay}">
-          <div class="tile__top">
-            {eyebrow(t["icon"], t["cat"])}
-            <h3 class="{title_cls}">{t['title']}</h3>
-          </div>
-          <time class="tile__date" datetime="{t['date']}">{t['date_label']}</time>
-        </a>"""
 
-    dark = " tile--dark" if t.get("dark") else ""
-    h = 326 if t["size"] == "large" else (230 if t.get("dark") else 210)
-    return f"""        <a class="tile {size}{dark} reveal" href="article.html" style="{delay}">
-          <figure class="tile__figure"><img class="tile__img" src="{IMG}{t['slug']}.webp" alt="{t['alt']}" width="580" height="{h}" loading="lazy"></figure>
-          <div class="tile__body">
-            <div class="tile__top">
-              {eyebrow(t["icon"], t["cat"])}
-              <h3 class="{title_cls}">{t['title']}</h3>
+# ---------------------------------------------------------------- скелетоны ---
+# Раздел 12: показывают первый экран, если данные не успели прийти.
+
+def _sk_tile(kind, solid=False):
+    media = "" if solid else '\n            <span class="sk sk-tile__media"></span>'
+    return f"""          <div class="sk-tile sk-tile--{kind}{' sk-tile--solid' if solid else ''}">{media}
+            <div class="sk-tile__body">
+              <div class="sk-tile__top">
+                <span class="sk sk--cat"></span>
+                <span class="sk sk--line" style="width:95%"></span>
+                <span class="sk sk--line" style="width:70%"></span>
+              </div>
+              <span class="sk sk--date"></span>
             </div>
-            <time class="tile__date" datetime="{t['date']}">{t['date_label']}</time>
+          </div>"""
+
+
+def hub_skeleton():
+    pills = "\n".join(
+        f'          <span class="sk sk--pill" style="width:{len(label) * 8 + 28}px"></span>'
+        for _, label in CHIPS)
+    tiles = "\n".join([
+        _sk_tile("large"), _sk_tile("large"),
+        _sk_tile("small", solid=True), _sk_tile("small"), _sk_tile("small"),
+    ])
+    return f"""      <div class="skeleton" data-skeleton hidden aria-hidden="true">
+        <div class="skeleton__inner">
+          <div class="skeleton__head">
+            <span class="sk sk--title"></span>
+            <span class="sk sk--subtitle"></span>
           </div>
-        </a>"""
+          <div class="filters skeleton__chips">
+{pills}
+          </div>
+          <div class="skeleton__grid">
+{tiles}
+          </div>
+        </div>
+      </div>"""
 
 
-def build_index():
+def article_skeleton():
+    h1 = "\n".join(f'            <span class="sk sk--h1" style="width:{w}"></span>'
+                   for w in ("100%", "100%", "72%"))
+    lede = "\n".join(f'            <span class="sk sk--lede" style="width:{w}"></span>'
+                     for w in ("100%", "64%"))
+    text = "\n".join(f'            <span class="sk sk--text" style="width:{w}"></span>'
+                     for w in ("100%", "100%", "100%", "100%", "58%"))
+    return f"""      <div class="skeleton skeleton--article" data-skeleton hidden aria-hidden="true">
+        <div class="skeleton__panel">
+          <div class="skeleton__col">
+            <span class="sk sk--bar" style="width:220px;height:12px"></span>
+            <span class="sk sk--bar" style="width:300px"></span>
+{h1}
+{lede}
+            <span class="sk sk--avatar"></span>
+          </div>
+          <span class="sk sk--hero" style="display:block"></span>
+          <div class="skeleton__col" style="padding:20px 0 40px">
+            <span class="sk sk--bar" style="width:80%;height:12px"></span>
+{text}
+          </div>
+        </div>
+      </div>"""
+
+
+# --------------------------------------------------------------------- хаб ----
+
+def build_hub():
+    total_pages = -(-len(ARTICLES) // PER_PAGE)
     chips = "\n".join(
-        '          <button class="chip{cls}" type="button" aria-pressed="{p}">{c}</button>'.format(
-            cls=" is-active" if n == 0 else "",
-            p="true" if n == 0 else "false",
-            c=c,
-        )
-        for n, c in enumerate(CHIPS)
-    )
-    tiles = "\n".join(render_tile(t, i) for i, t in enumerate(TILES))
+        '          <button class="chip{cls}" type="button" data-chip="{k}" aria-pressed="{p}">{label}</button>'.format(
+            cls=" is-active" if k == "all" else "", k=k,
+            p="true" if k == "all" else "false", label=e(label))
+        for k, label in CHIPS)
 
-    return (head("Useful tips from ProntoTest · Guide",
-                 "Real road situations in Spain explained step by step: what to look for, "
-                 "what to do and why, with official sources.")
+    cards = "\n".join(render_card(a, "", i % PER_PAGE, hidden=i >= PER_PAGE)
+                      for i, a in enumerate(ARTICLES))
+
+    pages = "\n".join(
+        f'        <a class="pager__item{" is-active" if n == 1 else ""}" href="#" data-page="{n}"'
+        f'{" aria-current=&#34;page&#34;" if n == 1 else ""} aria-label="Page {n}">{n}</a>'
+        for n in range(1, total_pages + 1))
+    # aria-current задаётся скриптом, в статической разметке только на первой
+    pages = pages.replace(' aria-current=&#34;page&#34;', ' aria-current="page"')
+
+    ld = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "Organization", "name": "ProntoTest", "legalName": "DevArch OÜ",
+             "email": "info@prontotest.net", "url": CANON},
+            {"@type": "WebSite", "name": "ProntoTest", "url": CANON},
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{CANON}/en/"},
+                {"@type": "ListItem", "position": 2, "name": "Guide", "item": f"{CANON}/en/guia"},
+            ]},
+            {"@type": "CollectionPage", "name": HUB_TITLE, "description": HUB_META_DESC,
+             "url": f"{CANON}/en/guia"},
+        ],
+    }, ensure_ascii=False)
+
+    og = f"""<meta property="og:type" content="website">
+<meta property="og:title" content="{e(HUB_TITLE)}">
+<meta property="og:description" content="{e(HUB_META_DESC)}">
+<meta property="og:url" content="{CANON}/en/guia">
+<meta property="og:image" content="{CANON}/assets/test_dgt-98c29666.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{ld}</script>
+"""
+
+    return (head(title=HUB_META_TITLE, description=HUB_META_DESC,
+                 canonical=f"{CANON}/en/guia", base="", extra=og)
             + f"""  <div class="page">
 {GLOW}
-{header()}
+{header("")}
     <main class="body container">
+{hub_skeleton()}
       <div class="page-head">
-        <h1 class="page-head__title">Useful tips from ProntoTest</h1>
-        <p class="page-head__desc">Real road situations in Spain explained step by step: what to look for, what to do and why, with official sources.</p>
+        <h1 class="page-head__title">{e(HUB_TITLE)}</h1>
+        <p class="page-head__desc">{e(HUB_DESC)}</p>
       </div>
 
       <div class="filters">
@@ -326,108 +468,123 @@ def build_index():
         </label>
       </div>
 
-      <div class="bento">
-{tiles}
+      <div class="bento" data-bento data-per-page="{PER_PAGE}">
+{cards}
       </div>
 
-      <nav class="pager" aria-label="Pagination">
-        <a class="pager__item is-disabled" href="#" aria-disabled="true">{icon("arrow-left")}<span>Previous</span></a>
-        <a class="pager__item is-active" href="#" aria-current="page">1</a>
-        <a class="pager__item" href="#">2</a>
-        <a class="pager__item" href="#">3</a>
-        <a class="pager__item" href="#"><span>Next</span>{icon("arrow-right")}</a>
+{promo("", CTA_BUTTON)}
+
+      <nav class="pager" aria-label="Tip pages" data-pager>
+        <a class="pager__item is-disabled" href="#" data-page="prev" aria-disabled="true" data-ua="arrow-left">{icon("arrow-left")}<span>Previous</span></a>
+{pages}
+        <a class="pager__item" href="#" data-page="next" data-ua="arrow-right"><span>Next</span>{icon("arrow-right")}</a>
       </nav>
     </main>
+{menu("")}
   </div>
 
-{footer()}
-{menu()}
-{TAIL}""")
+{footer("")}
+{tail("")}""")
 
 
-# ---------------------------------------------------------------- article ---
+# ------------------------------------------------------------------ статья ----
 
-BULLETS = [
-    "At dusk a car on the shoulder is spotted late: the traffic behind will be level with you within seconds.",
-    "Someone will only swerve round you at the last moment and may clip you.",
-    "Nobody has to stop and help: count on the breakdown service and 112.",
-    "If someone does stop beside you “to help”, they'll end up in the middle of the shoulder and become a hazard themselves.",
-]
+def build_article(a):
+    base = "../"
+    cat = CATEGORY[a["slug"]]
+    label, ic = CAT_LABEL[cat]
+    canonical = f"{CANON}/en/guia/{a['slug']}"
 
-STEPS = [
-    "While the car is still rolling, get it out of the running lanes: take the exit if there is one; if not, stop on the right-hand shoulder as far to the right as you can.",
-    "Switch on the hazard lights and sidelights, and put the vest on while you're still inside.",
-    "Switch the beacon on and put it on the roof through the window without getting out: that's why it belongs in the glovebox, not the boot. The beacon must be a connected one (sending data to DGT 3.0): since 1 January 2026 only these are valid, and warning triangles are no longer used.",
-    "Everyone gets out through the right-hand doors, the driver too, and goes straight behind the barrier.",
-    "If there's no safe place behind the barrier, stay in the car with your seatbelts on and call 112.",
-]
-
-MORE = [
-    ("book-cover", "Traffic rules",
-     "Stepped out of the car “for a minute”? For the law, that’s already parking",
-     "parada-o-estacionamiento-bajarse-del-coche",
-     "A driver stepping out of a car parked at the kerb"),
-    ("warning-diamond", "Traffic signs",
-     "A STOP sign and you can't see the road: why you stop twice",
-     "stop-sin-visibilidad-parar-dos-veces",
-     "A junction with a STOP sign and blocked visibility"),
-    ("energy", "Lights",
-     "Fog lights in a downpour: when the rear one helps and when it dazzles",
-     "luces-antiniebla-cuando-encender",
-     "Cars in heavy rain with rear fog lights on"),
-]
-
-
-def build_article():
-    bullets = "\n".join(
-        f'            <li>{icon("warning")}<span>{b}</span></li>' for b in BULLETS)
+    notice = "\n".join(f'            <li>{icon("warning")}<span>{e(b)}</span></li>'
+                       for b in a["notice"])
     steps = "\n".join(
-        f'            <li><span class="steps__num">{n}</span><span>{s}</span></li>'
-        for n, s in enumerate(STEPS, 1))
-    more = "\n".join(f"""        <a class="mini reveal" href="#" style="--delay:{i * 60}ms">
-          {eyebrow(ic, cat)}
-          <h3 class="mini__title">{title}</h3>
-          <figure class="mini__figure"><img src="{IMG}{slug}.webp" alt="{alt}" width="313" height="150" loading="lazy"></figure>
-        </a>""" for i, (ic, cat, title, slug, alt) in enumerate(MORE))
+        f'            <li><span class="steps__num">{n}</span><span>{e(s)}</span></li>'
+        for n, s in enumerate(to_steps(a["action"]), 1))
 
-    return (head("Broken down on the motorway: beacon on the roof, everyone behind the barrier · ProntoTest",
-                 "Put the beacon on the roof from inside the car. Then everyone gets behind the "
-                 "barrier instead of standing on the shoulder.")
+    by_n = {x["n"]: x for x in ARTICLES}
+    more = "\n".join(f"""          <a class="mini reveal" href="{article_href(m['slug'], base)}" style="--delay:{i * 60}ms">
+            {eyebrow(CAT_LABEL[CATEGORY[m['slug']]][1], CAT_LABEL[CATEGORY[m['slug']]][0], "eyebrow--plain")}
+            <h3 class="mini__title">{e(m['title'])}</h3>
+            <figure class="mini__figure"><img src="{m['cover']}" alt="" width="1200" height="675" loading="lazy"></figure>
+          </a>""" for i, m in enumerate(by_n[n] for n in a["moreTips"]))
+
+    ld = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "Organization", "name": "ProntoTest", "legalName": "DevArch OÜ",
+             "email": "info@prontotest.net", "url": CANON},
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{CANON}/en/"},
+                {"@type": "ListItem", "position": 2, "name": "Guide", "item": f"{CANON}/en/guia"},
+                {"@type": "ListItem", "position": 3, "name": a["title"], "item": canonical},
+            ]},
+            {"@type": "ImageObject", "contentUrl": a["cover"], "caption": a["coverCaption"],
+             "width": 1200, "height": 675},
+            {"@type": "Article", "headline": a["title"], "description": a["takeaway"],
+             "image": a["cover"], "datePublished": a["publishedIso"],
+             "dateModified": a["updatedIso"] or a["publishedIso"],
+             "author": {"@type": "Organization", "name": "ProntoTest"},
+             "publisher": {"@type": "Organization", "name": "ProntoTest"},
+             "mainEntityOfPage": canonical},
+        ],
+    }, ensure_ascii=False)
+
+    og_img = f"{CANON}/og/guia/{a['slug']}.en.png"
+    og = f"""<meta property="og:type" content="article">
+<meta property="og:title" content="{e(a['title'])}">
+<meta property="og:description" content="{e(a['takeaway'])}">
+<meta property="og:url" content="{canonical}">
+<meta property="og:image" content="{og_img}">
+<meta property="og:image:alt" content="ProntoTest card: {e(a['title'])}">
+<meta property="article:published_time" content="{a['publishedIso']}">
+<meta property="article:modified_time" content="{a['updatedIso'] or a['publishedIso']}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(a['title'])}">
+<meta name="twitter:description" content="{e(a['takeaway'])}">
+<meta name="twitter:image" content="{og_img}">
+<script type="application/ld+json">{ld}</script>
+"""
+
+    share = f"""            <div class="head-actions">
+              <button class="btn-secondary" type="button" data-share data-ua="share">{icon("share")}<span>Share</span></button>
+              <button class="btn-secondary" type="button" data-copy-link data-ua="copy">{icon("link")}<span>Copy link</span></button>
+            </div>"""
+
+    return (head(title=a["metaTitle"], description=a["takeaway"],
+                 canonical=canonical, base=base, extra=og)
             + f"""  <div class="page">
 {GLOW}
-{header()}
+{header(base)}
     <main class="article-body container">
+{article_skeleton()}
       <article class="panel">
         <header class="article-head measure">
-          {eyebrow("warning", "Guide · Road safety &amp; accidents")}
-          <p class="article-dates"><time datetime="2026-09-06">6 September 2026</time> · Updated <time datetime="2026-11-04">4 November 2026</time></p>
-          <h1 class="article-title">Broken down on the motorway: beacon on the roof, everyone behind the barrier</h1>
-          <p class="article-lede">Put the beacon on the roof from inside the car. Then everyone gets behind the barrier instead of standing on the shoulder.</p>
+          {eyebrow(ic, f"Guide · {label}")}
+          <p class="article-dates">{fmt_dates(a)}</p>
+          <h1 class="article-title">{e(a['title'])}</h1>
+          <p class="article-lede">{e(a['takeaway'])}</p>
           <div class="head-row">
             <div class="author">
               <span class="author__avatar">{icon("energy")}</span>
               <span class="author__name">By ProntoTest</span>
             </div>
-            <div class="head-actions">
-              <button class="btn-secondary" type="button">{icon("share")}<span>Share</span></button>
-              <button class="btn-secondary" type="button" data-copy-link>{icon("link")}<span>Copy link</span></button>
-            </div>
+{share}
           </div>
         </header>
 
         <figure class="article-hero">
-          <img src="{IMG}averia-en-autovia-baliza-v16.webp" alt="Top view: an orange car on the right-hand shoulder of an autovía with a V-16 beacon on its roof" width="980" height="551">
+          <img src="{a['animation']}" alt="{e(a['animationAlt'])}" width="1200" height="675">
         </figure>
 
         <div class="article-column measure">
-          <p class="caption">Top view: an orange car pulls onto the right-hand shoulder of an autovía, a V-16 beacon lights up on its roof and the people move behind the barrier</p>
+          <p class="caption">{e(a['coverCaption'])}</p>
 
           <div class="text-block">
-            <p>You're driving along an autovía (a Spanish dual carriageway) at dusk. The car loses power, the next exit is a long way off, and you coast onto the right-hand shoulder. Behind you the traffic is doing 120 km/h. You have two passengers with you, and the V-16 beacon and the hi-vis vest are in the glovebox.</p>
+            <p>{e(a['intro'])}</p>
 
             <h2>What to notice</h2>
             <ul class="bullets">
-{bullets}
+{notice}
             </ul>
 
             <h2>What to do</h2>
@@ -435,43 +592,43 @@ def build_article():
 {steps}
             </ol>
           </div>
-        </div>
 
-        <figure class="article-anim">
-          <img src="{IMG}averia-anim.png" alt="Animation frames: hard shoulder, beacon on the roof, everyone behind the barrier" width="980" height="551" loading="lazy">
-        </figure>
-
-        <div class="article-end measure">
-          <p class="caption">Animation · 14 s. Step by step: shoulder, beacon on the roof, everyone behind the barrier.</p>
+          <div class="head-row head-row--end">
+{share}
+          </div>
         </div>
       </article>
 
-      <div class="promo">
-        <div class="promo__top">
-          {eyebrow("checkmark-in-circle", "Free DGT test")}
-          <p class="promo__title">Read the tips, then check yourself in the free category B mock exam</p>
-        </div>
-        <a class="btn-pill" href="#">Practise with free tests</a>
-      </div>
+{promo(base, CTA_ARTICLE_BUTTON)}
 
       <section class="more">
         <div class="more__head">
           <h2 class="more__title">More tips</h2>
-          <a class="more__link" href="index.html">All tips{icon("chevron-right")}</a>
+          <a class="more__link" href="{base}index.html">All tips{icon("chevron-right")}</a>
         </div>
-        <div class="more__row">
+        <div class="more__row more__row--two">
 {more}
         </div>
       </section>
     </main>
+{menu(base)}
   </div>
 
-{footer()}
-{menu()}
-{TAIL}""")
+{footer(base)}
+{tail(base)}""")
 
+
+# -------------------------------------------------------------------- main ----
 
 if __name__ == "__main__":
-    (ROOT / "index.html").write_text(build_index(), encoding="utf-8")
-    (ROOT / "article.html").write_text(build_article(), encoding="utf-8")
-    print("built", os.path.getsize(ROOT / "index.html"), os.path.getsize(ROOT / "article.html"))
+    (ROOT / "index.html").write_text(build_hub(), encoding="utf-8")
+    out = ROOT / "guia"
+    out.mkdir(exist_ok=True)
+    for a in ARTICLES:
+        (out / f"{a['slug']}.html").write_text(build_article(a), encoding="utf-8")
+    old = ROOT / "article.html"
+    if old.exists():
+        old.unlink()
+    print("hub + ", len(ARTICLES), "articles")
+    counts = [len(to_steps(a["action"])) for a in ARTICLES]
+    print("steps per article:", counts)
